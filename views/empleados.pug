@@ -1,0 +1,47 @@
+//- views/empleados.pug
+extends layout
+
+block content
+  h1 Gestión de Empleados
+
+  h2 Lista actual
+  table
+    thead
+      tr
+        th Nombre
+        th Apellido
+        th Usuario
+        th Password
+        th Rol
+        th Sector
+        th Acciones
+    tbody#lista-empleados
+
+  h2 Alta de empleado
+  form#form-agregar
+    input(type="text", name="nombre", placeholder="Nombre", required)
+    input(type="text", name="apellido", placeholder="Apellido", required)
+    input(type="text", name="usuario", placeholder="Usuario", required)
+    input(type="password", name="password", placeholder="Contraseña", required)
+    select(name="sector", id="sector-agregar", required)
+      option(value="") -- Seleccionar sector --
+    select(name="rol", id="rol-agregar", required disabled)
+      option(value="") -- Seleccionar rol --
+    button(type="submit") Agregar
+
+  h2 Modificar empleado
+  form#form-editar(style="display:none;")
+    input(type="hidden", name="id")
+    input(type="text", name="nombre", placeholder="Nuevo Nombre", required)
+    input(type="text", name="apellido", placeholder="Nuevo Apellido", required)
+    input(type="text", name="usuario", placeholder="Nuevo Usuario", required)
+    input(type="password", name="password", placeholder="Nueva Contraseña", required)
+    select(name="sector", id="sector-editar", required)
+      option(value="") -- Seleccionar sector --
+    select(name="rol", id="rol-editar", required disabled)
+      option(value="") -- Seleccionar rol --
+    button(type="submit") Editar
+
+  link(rel="stylesheet", href="/css/empleados.css")
+  link(rel="stylesheet", href="/css/styles.css")
+  script(src="/js/empleados.js")

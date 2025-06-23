@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "nombre": "María",
+    "apellido": "Pérez",
+    "usuario": "mperez",
+    "password": "maria123",
+    "rol": "Agente inmobiliario",
+    "sector": "Ventas"
+  },
+  {
+    "id": 2,
+    "nombre": "Lucas",
+    "apellido": "Fernández",
+    "usuario": "lfernandez",
+    "password": "lucas123",
+    "rol": "Secretario/a administrativo",
+    "sector": "Administración"
+  },
+  {
+    "id": 3,
+    "nombre": "Sofía",
+    "apellido": "Gómez",
+    "usuario": "sgomez",
+    "password": "sofia123",
+    "rol": "Contador/a",
+    "sector": "Contabilidad"
+  },
+  {
+    "id": 4,
+    "nombre": "Damian",
+    "apellido": "Coronel",
+    "usuario": "damiancoronel",
+    "password": "123456",
+    "sector": "Administración",
+    "rol": "Recepcionista"
+  }
+]

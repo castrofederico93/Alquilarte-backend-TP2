@@ -1,0 +1,13 @@
+{
+  "name": "alquilarte-backend",
+  "version": "1.0.0",
+  "description": "Backend del proyecto Alquilarte",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pug": "^3.0.3"
+  }
+}

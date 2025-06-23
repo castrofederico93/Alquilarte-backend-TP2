@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "titulo": "Llamar a potencial cliente",
+    "descripcion": "Contactar a Juan López para ofrecerle el departamento en Palermo.",
+    "area": "Ventas",
+    "estado": "pendiente",
+    "prioridad": "alta",
+    "fecha": "2025-05-18"
+  },
+  {
+    "id": 2,
+    "titulo": "Cargar pago de alquiler",
+    "descripcion": "Registrar en el sistema el pago de mayo del inquilino del local 3.",
+    "area": "Administración",
+    "estado": "en proceso",
+    "prioridad": "media",
+    "fecha": "2025-05-17"
+  },
+  {
+    "id": 3,
+    "titulo": "Actualizar contrato",
+    "descripcion": "Revisar cláusulas y renovar contrato del PH en Caballito.",
+    "area": "Ventas",
+    "estado": "pendiente",
+    "prioridad": "baja",
+    "fecha": "2025-05-20"
+  },
+  {
+    "id": 4,
+    "titulo": "Generar reporte de expensas",
+    "descripcion": "Crear informe mensual para propietarios del edificio Las Rosas.",
+    "area": "Administración",
+    "estado": "finalizada",
+    "prioridad": "alta",
+    "fecha": "2025-05-15"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "Ventas": [
+    "Agente inmobiliario",
+    "Coordinador comercial"
+  ],
+  "Administración": [
+    "Recepcionista",
+    "Secretario/a administrativo",
+    "Responsable de RRHH"
+  ],
+  "Contabilidad": [
+    "Contador/a",
+    "Auxiliar contable",
+    "Encargado/a de cobranzas"
+  ],
+  "Mantenimiento": [
+    "Coordinador/a",
+    "Técnico/a de mantenimiento",
+    "Auxiliar"
+  ]
+}

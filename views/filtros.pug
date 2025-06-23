@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title Tareas Filtradas
+    link(rel="stylesheet", href="/css/filtros.css")
+    script(src="/js/filtros.js")
+  body
+    h1 Resultado del Filtro
+
+    if tareas.length
+      each tarea in tareas
+        div.tarea-card
+          h2= tarea.titulo
+          p Área: #{tarea.area}
+          p Estado: #{tarea.estado}
+          p Prioridad: #{tarea.prioridad}
+          p Fecha: #{tarea.fecha}
+          p Encargado ID: #{tarea.asignadoA}
+    else
+      p.no-tareas No se encontraron tareas con esos filtros.
