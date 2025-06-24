@@ -25,7 +25,7 @@ html
         tbody
           each tarea in tareas
             tr(class=tarea.estado.replace(' ', '-'))
-              td #{tarea.id}
+              td #{tarea._id}
               td #{tarea.titulo}
               td #{tarea.descripcion}
               td #{tarea.estado}
@@ -34,7 +34,7 @@ html
               td #{tarea.fecha}
               td
                 button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
-                button.eliminar(type="button", onclick=`eliminarTarea(${tarea.id})`) Eliminar
+                button.eliminar(type="button", onclick=`eliminarTarea('${tarea._id}')`) Eliminar
     else
       p No hay tareas para mostrar.
 
