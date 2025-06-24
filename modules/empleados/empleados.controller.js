@@ -29,7 +29,6 @@ async function crearEmpleado(req, res, next) {
       throw err;
     }
 
-    // Hashear la contraseña antes de guardar
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const nuevoEmpleado = new Empleado({
@@ -51,26 +50,35 @@ async function crearEmpleado(req, res, next) {
 // PUT /empleados/:id
 async function actualizarEmpleado(req, res, next) {
   try {
-    const actualizacion = { ...req.body };
-
-    // Si viene una nueva contraseña, la hasheamos
-    if (actualizacion.password) {
-      actualizacion.password = await bcrypt.hash(actualizacion.password, 10);
-    }
-
-    const actualizado = await Empleado.findByIdAndUpdate(
-      req.params.id,
-      actualizacion,
-      { new: true }
-    );
-
-    if (!actualizado) {
+    const empleado = await Empleado.findById(req.params.id);
+    if (!empleado) {
       const err = new Error('Empleado no encontrado');
       err.status = 404;
       throw err;
     }
 
-    res.json(actualizado);
+    // Si se solicita cambio de contraseña
+    if (req.body.passwordNueva) {
+      const coincide = await bcrypt.compare(req.body.passwordActual, empleado.password);
+      if (!coincide) {
+        const err = new Error('La contraseña actual es incorrecta');
+        err.status = 400;
+        throw err;
+      }
+
+      // Hasheamos la nueva
+      empleado.password = await bcrypt.hash(req.body.passwordNueva, 10);
+    }
+
+    // Actualizar otros campos
+    empleado.nombre = req.body.nombre;
+    empleado.apellido = req.body.apellido;
+    empleado.usuario = req.body.usuario;
+    empleado.sector = req.body.sector;
+    empleado.rol = req.body.rol;
+
+    await empleado.save();
+    res.json(empleado);
   } catch (err) {
     next(err);
   }
