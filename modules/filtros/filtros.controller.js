@@ -1,29 +1,32 @@
-const fs = require('fs').promises;
-const path = require('path');
-const tareasPath = path.join(__dirname, '../../data/tareas.json');
-
-async function leerTareas() {
-  const data = await fs.readFile(tareasPath, 'utf-8');
-  return JSON.parse(data);
-}
+const Tarea = require('../../models/Tarea');
 
 exports.filtrarYMostrar = async (req, res) => {
   const { estado, prioridad, fecha, area } = req.query;
-  let tareas = await leerTareas();
 
-  if (estado) {
-    tareas = tareas.filter(t => t.estado.toLowerCase() === estado.toLowerCase());
-  }
-  if (prioridad) {
-    tareas = tareas.filter(t => t.prioridad.toLowerCase() === prioridad.toLowerCase());
-  }
+  const filtros = {};
+  if (estado) filtros.estado = new RegExp(`^${estado}$`, 'i');       // insensible a mayúsculas
+  if (prioridad) filtros.prioridad = new RegExp(`^${prioridad}$`, 'i');
+  if (area) filtros.area = new RegExp(`^${area}$`, 'i');
+
   if (fecha) {
-    tareas = tareas.filter(t => t.fecha === fecha);
-  }
-  if (area) {
-    tareas = tareas.filter(t => t.area.toLowerCase() === area.toLowerCase());
+    try {
+      const fechaObj = new Date(fecha);
+      if (!isNaN(fechaObj)) {
+        // busca tareas con la misma fecha (ignorando la hora)
+        const siguienteDia = new Date(fechaObj);
+        siguienteDia.setDate(fechaObj.getDate() + 1);
+        filtros.fecha = { $gte: fechaObj, $lt: siguienteDia };
+      }
+    } catch (e) {
+      console.warn('Fecha inválida:', fecha);
+    }
   }
 
-  res.render('filtros', { tareas });
+  try {
+    const tareas = await Tarea.find(filtros);
+    res.render('filtros', { tareas });
+  } catch (error) {
+    console.error('Error al filtrar tareas:', error);
+    res.status(500).send('Error al cargar los filtros');
+  }
 };
-//Alejandro
