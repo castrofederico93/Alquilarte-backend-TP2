@@ -1,8 +1,12 @@
 const express = require("express");
+
+// CONEXIÓN A MONGODB
+const connectDB = require('./config/db');
+connectDB();
+
 // Middlewares
 const requestLogger = require('./middlewares/requestLogger');
 const errorHandler = require('./middlewares/errorHandler');
-
 
 const app = express();
 const port = 3000;
@@ -14,7 +18,6 @@ app.set('views', './views');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
 
 // Middleware propio
 app.use(requestLogger);
@@ -29,7 +32,6 @@ app.use("/login", loginRoutes);
 app.use("/tareas", tareasRoutes);
 app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
-
 
 // Vistas Pug
 app.get('/menu', (req, res) => {
@@ -57,24 +59,12 @@ app.get('/', (req, res) => {
   res.redirect('/login-vista');
 });
 
-
-
-
-
 // Ruta para probar errores
 app.get('/error', (req, res) => {
   throw new Error('¡Este es un error de prueba!');
 });
 
-/* Middleware 404 personalizado (opcional)
-app.use((req, res, next) => {
-  const err = new Error('Ruta no encontrada');
-  err.status = 404;
-  next(err);
-});
-*/
-
-// Middleware de errores (siempre al final)
+// Middleware de errores
 app.use(errorHandler);
 
 // Iniciar servidor

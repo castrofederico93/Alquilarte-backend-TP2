@@ -63,8 +63,8 @@ function cargarEmpleados() {
           <td>${emp.rol}</td>
           <td>${emp.sector}</td>
           <td>
-            <button onclick="eliminarEmpleado('${emp.id}')">Eliminar</button>
-            <button onclick="prepararEdicion('${emp.id}', '${emp.nombre}', '${emp.apellido}', '${emp.usuario}', '${emp.password}', '${emp.rol}', '${emp.sector}')">Editar</button>
+            <button onclick="eliminarEmpleado('${emp._id}')">Eliminar</button>
+            <button onclick="prepararEdicion('${emp._id}', '${emp.nombre}', '${emp.apellido}', '${emp.usuario}', '${emp.password}', '${emp.rol}', '${emp.sector}')">Editar</button>
           </td>
         `;
         lista.appendChild(tr);

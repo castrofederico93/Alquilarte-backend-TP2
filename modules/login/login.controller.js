@@ -1,4 +1,5 @@
-const { leerEmpleados } = require('../empleados/empleados.model');
+const Empleado = require('../../models/Empleado');
+const bcrypt = require('bcrypt');
 
 async function login(req, res, next) {
   const { usuario, password } = req.body;
@@ -10,22 +11,26 @@ async function login(req, res, next) {
   }
 
   try {
-    const empleados = await leerEmpleados();
-    const empleado = empleados.find(e => e.usuario === usuario && e.password === password);
+    const empleado = await Empleado.findOne({ usuario });
 
-     if (empleado) {
-      if (req.accepts('html')) {
-      // Renderizamos directamente la vista 'menu' con el mensaje y el empleado
-        return res.render('menu', {
-          mensaje: 'Login exitoso',
-          empleado
-        });
-      } else {
-        return res.json({ mensaje: 'Login exitoso', empleado });
-      }
+    if (!empleado) {
+      return res.status(400).json({ mensaje: 'Usuario no válido' });
+    }
+
+    const coincide = await bcrypt.compare(password, empleado.password);
+
+    if (!coincide) {
+      return res.status(400).json({ mensaje: 'Contraseña incorrecta' });
+    }
+
+    // Login exitoso
+    if (req.accepts('html')) {
+      return res.render('menu', {
+        mensaje: 'Login exitoso',
+        empleado
+      });
     } else {
-      // Credenciales inválidas
-      return res.status(400).json({ mensaje: 'Usuario no valido' });
+      return res.json({ mensaje: 'Login exitoso', empleado });
     }
   } catch (err) {
     next(err);
