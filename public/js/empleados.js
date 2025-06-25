@@ -1,5 +1,3 @@
-// public/js/empleados.js
-
 const lista = document.getElementById('lista-empleados');
 const formAgregar = document.getElementById('form-agregar');
 const formEditar = document.getElementById('form-editar');
@@ -10,12 +8,15 @@ const selectSectorEditar = document.getElementById('sector-editar');
 const selectRolEditar = document.getElementById('rol-editar');
 let rolesPorSector = {};
 
+const esRRHH = window.usuario.sector === 'Administración' && window.usuario.rol === 'Responsable de RRHH';
+
 fetch('/empleados/sectores-roles')
   .then(res => res.json())
   .then(data => {
     rolesPorSector = data;
 
     [selectSectorAgregar, selectSectorEditar].forEach(select => {
+      if (!select) return;
       select.innerHTML = '<option value="">-- Seleccionar sector --</option>';
       Object.keys(data).forEach(sector => {
         const option = document.createElement('option');
@@ -41,12 +42,17 @@ function actualizarRoles(selectSector, selectRol) {
   }
 }
 
-selectSectorAgregar.addEventListener('change', () => {
-  actualizarRoles(selectSectorAgregar, selectRolAgregar);
-});
-selectSectorEditar.addEventListener('change', () => {
-  actualizarRoles(selectSectorEditar, selectRolEditar);
-});
+if (selectSectorAgregar) {
+  selectSectorAgregar.addEventListener('change', () => {
+    actualizarRoles(selectSectorAgregar, selectRolAgregar);
+  });
+}
+
+if (selectSectorEditar) {
+  selectSectorEditar.addEventListener('change', () => {
+    actualizarRoles(selectSectorEditar, selectRolEditar);
+  });
+}
 
 function cargarEmpleados() {
   fetch('/empleados')
@@ -55,6 +61,17 @@ function cargarEmpleados() {
       lista.innerHTML = '';
       data.forEach(emp => {
         const tr = document.createElement('tr');
+
+        const esElMismo = emp._id === window.usuario.id;
+
+        let botones = '';
+        if (esRRHH || esElMismo) {
+          botones += `<button onclick="prepararEdicion('${emp._id}', '${emp.nombre}', '${emp.apellido}', '${emp.usuario}', '${emp.rol}', '${emp.sector}')">Editar</button>`;
+        }
+        if (esRRHH) {
+          botones += `<button onclick="eliminarEmpleado('${emp._id}')">Eliminar</button>`;
+        }
+
         tr.innerHTML = `
           <td>${emp.nombre}</td>
           <td>${emp.apellido}</td>
@@ -62,10 +79,7 @@ function cargarEmpleados() {
           <td>****</td>
           <td>${emp.rol}</td>
           <td>${emp.sector}</td>
-          <td>
-            <button onclick="eliminarEmpleado('${emp._id}')">Eliminar</button>
-            <button onclick="prepararEdicion('${emp._id}', '${emp.nombre}', '${emp.apellido}', '${emp.usuario}', '${emp.password}', '${emp.rol}', '${emp.sector}')">Editar</button>
-          </td>
+          <td>${botones}</td>
         `;
         lista.appendChild(tr);
       });
@@ -74,7 +88,6 @@ function cargarEmpleados() {
 
 function eliminarEmpleado(id) {
   const confirmado = confirm('¿Estás seguro de que querés eliminar este empleado?');
-
   if (!confirmado) return;
 
   fetch('/empleados/' + id, { method: 'DELETE' })
@@ -91,17 +104,25 @@ function eliminarEmpleado(id) {
     });
 }
 
-function prepararEdicion(id, nombre, apellido, usuario, password, rol, sector) {
+function prepararEdicion(id, nombre, apellido, usuario, rol, sector) {
   document.getElementById('seccion-editar').style.display = 'block';
   formEditar.id.value = id;
-  formEditar.nombre.value = nombre;
-  formEditar.apellido.value = apellido;
-  formEditar.usuario.value = usuario;
+
+  if (esRRHH) {
+    formEditar.nombre.value = nombre;
+    formEditar.apellido.value = apellido;
+    formEditar.usuario.value = usuario;
+    formEditar.rol.value = rol;
+    formEditar.sector.value = sector;
+    actualizarRoles(selectSectorEditar, selectRolEditar);
+  } else {
+    formEditar.nombre.value = '';
+    formEditar.apellido.value = '';
+    formEditar.usuario.value = '';
+  }
+
   formEditar.passwordActual.value = '';
   formEditar.passwordNueva.value = '';
-  formEditar.rol.value = rol;
-  formEditar.sector.value = sector;
-  actualizarRoles(selectSectorEditar, selectRolEditar);
   window.scrollTo(0, document.body.scrollHeight);
 }
 
@@ -109,83 +130,93 @@ function capitalizar(texto) {
   return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
 }
 
-formAgregar.addEventListener('submit', async e => {
-  e.preventDefault();
-  const datosRaw = Object.fromEntries(new FormData(formAgregar));
+if (formAgregar) {
+  formAgregar.addEventListener('submit', async e => {
+    e.preventDefault();
+    const datosRaw = Object.fromEntries(new FormData(formAgregar));
 
-  const datos = {
-    nombre: capitalizar(datosRaw.nombre),
-    apellido: capitalizar(datosRaw.apellido),
-    usuario: datosRaw.usuario.toLowerCase(),
-    password: datosRaw.password,
-    sector: datosRaw.sector,
-    rol: datosRaw.rol
-  };
+    const datos = {
+      nombre: capitalizar(datosRaw.nombre),
+      apellido: capitalizar(datosRaw.apellido),
+      usuario: datosRaw.usuario.toLowerCase(),
+      password: datosRaw.password,
+      sector: datosRaw.sector,
+      rol: datosRaw.rol
+    };
 
-  try {
-    const res = await fetch('/empleados', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(datos)
-    });
+    try {
+      const res = await fetch('/empleados', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
 
-    if (!res.ok) {
-      const error = await res.text();
-      alert('Error al crear empleado: ' + error);
-      return;
+      if (!res.ok) {
+        const error = await res.text();
+        alert('Error al crear empleado: ' + error);
+        return;
+      }
+
+      formAgregar.reset();
+      document.getElementById('seccion-alta').style.display = 'none';
+      cargarEmpleados();
+    } catch (err) {
+      alert('Error de red al crear empleado');
     }
+  });
+}
 
+const cancelarAlta = document.getElementById('cancelar-alta');
+if (cancelarAlta) {
+  cancelarAlta.addEventListener('click', () => {
     formAgregar.reset();
     document.getElementById('seccion-alta').style.display = 'none';
-    cargarEmpleados();
-  } catch (err) {
-    alert('Error de red al crear empleado');
-  }
-});
+  });
+}
 
-document.getElementById('cancelar-alta').addEventListener('click', () => {
-  formAgregar.reset();
-  document.getElementById('seccion-alta').style.display = 'none';
-});
+if (formEditar) {
+  formEditar.addEventListener('submit', async e => {
+    e.preventDefault();
+    const id = formEditar.id.value;
 
-formEditar.addEventListener('submit', async e => {
-  e.preventDefault();
-  const id = formEditar.id.value;
+    const datos = {
+      nombre: capitalizar(formEditar.nombre.value),
+      apellido: capitalizar(formEditar.apellido.value),
+      usuario: formEditar.usuario.value.toLowerCase(),
+      passwordActual: formEditar.passwordActual.value,
+      passwordNueva: formEditar.passwordNueva.value,
+      rol: formEditar.rol.value,
+      sector: formEditar.sector.value
+    };
 
-  const datos = {
-    nombre: capitalizar(formEditar.nombre.value),
-    apellido: capitalizar(formEditar.apellido.value),
-    usuario: formEditar.usuario.value.toLowerCase(),
-    passwordActual: formEditar.passwordActual.value,
-    passwordNueva: formEditar.passwordNueva.value,
-    rol: formEditar.rol.value,
-    sector: formEditar.sector.value
-  };
+    try {
+      const res = await fetch('/empleados/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
 
-  try {
-    const res = await fetch('/empleados/' + id, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(datos)
-    });
+      if (!res.ok) {
+        const error = await res.text();
+        alert('Error al editar empleado: ' + error);
+        return;
+      }
 
-    if (!res.ok) {
-      const error = await res.text();
-      alert('Error al editar empleado: ' + error);
-      return;
+      formEditar.reset();
+      document.getElementById('seccion-editar').style.display = 'none';
+      cargarEmpleados();
+    } catch (err) {
+      alert('Error de red al editar empleado');
     }
+  });
+}
 
-    formEditar.reset();
-    document.getElementById('seccion-editar').style.display = 'none';
-    cargarEmpleados();
-  } catch (err) {
-    alert('Error de red al editar empleado');
-  }
-});
-
-document.getElementById('mostrar-alta').addEventListener('click', () => {
-  const seccionAlta = document.getElementById('seccion-alta');
-  seccionAlta.style.display = (seccionAlta.style.display === 'none') ? 'block' : 'none';
-});
+const mostrarAlta = document.getElementById('mostrar-alta');
+if (mostrarAlta) {
+  mostrarAlta.addEventListener('click', () => {
+    const seccionAlta = document.getElementById('seccion-alta');
+    seccionAlta.style.display = (seccionAlta.style.display === 'none') ? 'block' : 'none';
+  });
+}
 
 cargarEmpleados();
