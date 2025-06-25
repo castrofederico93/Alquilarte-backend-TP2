@@ -8,14 +8,15 @@ const {
   eliminarEmpleado,
   obtenerSectoresRoles,
 } = require('./empleados.controller');
+const verificarToken = require('../../middlewares/auth');
 
-// Rutas de empleados
-router.get('/', obtenerEmpleados);
-router.post('/', crearEmpleado);
-router.put('/:id', actualizarEmpleado);
-router.delete('/:id', eliminarEmpleado);
+// Rutas protegidas con JWT
+router.get('/', verificarToken, obtenerEmpleados);
+router.post('/', verificarToken, crearEmpleado);
+router.put('/:id', verificarToken, actualizarEmpleado);
+router.delete('/:id', verificarToken, eliminarEmpleado);
 
 // Ruta para sectores y roles
-router.get('/sectores-roles', obtenerSectoresRoles);
+router.get('/sectores-roles', verificarToken, obtenerSectoresRoles);
 
 module.exports = router;

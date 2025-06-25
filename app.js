@@ -1,4 +1,6 @@
 const express = require("express");
+require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 // CONEXIÓN A MONGODB
 const connectDB = require('./config/db');
@@ -7,6 +9,7 @@ connectDB();
 // Middlewares
 const requestLogger = require('./middlewares/requestLogger');
 const errorHandler = require('./middlewares/errorHandler');
+const verificarToken = require('./middlewares/auth');
 
 const app = express();
 const port = 3000;
@@ -17,6 +20,7 @@ app.set('views', './views');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.static('public'));
 
 // Middleware propio
@@ -33,28 +37,34 @@ app.use("/tareas", tareasRoutes);
 app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 
-// Vistas Pug
-app.get('/menu', (req, res) => {
-  res.render('menu');
+// Vistas Pug protegidas
+app.get('/menu', verificarToken, (req, res) => {
+  res.render('menu', { usuario: req.usuario });
 });
 
+app.get('/empleados-vista', verificarToken, (req, res) => {
+  res.render('empleados', { usuario: req.usuario });
+});
+
+app.get('/filtros/vista', verificarToken, (req, res) => {
+  res.render('filtros', { usuario: req.usuario });
+});
+
+app.get('/tareas/vista', verificarToken, (req, res) => {
+  res.render('tareas', { usuario: req.usuario });
+});
+
+// Cierre de sesión global
+app.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.redirect('/login-vista');
+});
+
+// Rutas públicas
 app.get('/login-vista', (req, res) => {
   res.render('login', { error: null });
 });
 
-app.get('/empleados-vista', (req, res) => {
-  res.render('empleados');
-});
-
-app.get('/filtros/vista', (req, res) => {
-  res.render('filtros');
-});
-
-app.get('/tareas/vista', (req, res) => {
-  res.render('tareas');
-});
-
-// Ruta raíz
 app.get('/', (req, res) => {
   res.redirect('/login-vista');
 });

@@ -1,7 +1,8 @@
-//- views/empleados.pug
 extends layout
 
 block content
+  - const esRRHH = usuario && usuario.sector === 'Administración' && usuario.rol === 'Responsable de RRHH';
+
   h1 Gestión de Empleados
 
   h2 Lista actual
@@ -17,39 +18,47 @@ block content
         th Acciones
     tbody#lista-empleados
 
-  button#mostrar-alta(type="button") Alta de empleado
+  if esRRHH
+    button#mostrar-alta(type="button") Alta de empleado
 
-  div#seccion-alta(style="display:none;")
-    h2 Alta de empleado
-    form#form-agregar
-      input(type="text", name="nombre", placeholder="Nombre", required)
-      input(type="text", name="apellido", placeholder="Apellido", required)
-      input(type="text", name="usuario", placeholder="Usuario", required)
-      input(type="password", name="password", placeholder="Contraseña", required)
-      select(name="sector", id="sector-agregar", required)
-        option(value="") -- Seleccionar sector --
-      select(name="rol", id="rol-agregar", required disabled)
-        option(value="") -- Seleccionar rol --
-      button(type="button", id="cancelar-alta") Cancelar
-      button(type="submit") Agregar
-
+  if esRRHH
+    div#seccion-alta(style="display:none;")
+      h2 Alta de empleado
+      form#form-agregar
+        input(type="text", name="nombre", placeholder="Nombre", required)
+        input(type="text", name="apellido", placeholder="Apellido", required)
+        input(type="text", name="usuario", placeholder="Usuario", required)
+        input(type="password", name="password", placeholder="Contraseña", required)
+        select(name="sector", id="sector-agregar", required)
+          option(value="") -- Seleccionar sector --
+        select(name="rol", id="rol-agregar", required disabled)
+          option(value="") -- Seleccionar rol --
+        button(type="button", id="cancelar-alta") Cancelar
+        button(type="submit") Agregar
 
   div#seccion-editar(style="display:none;")
     h2 Modificar empleado
     form#form-editar
       input(type="hidden", name="id")
-      input(type="text", name="nombre", placeholder="Nuevo Nombre", required)
-      input(type="text", name="apellido", placeholder="Nuevo Apellido", required)
-      input(type="text", name="usuario", placeholder="Nuevo Usuario", required)
+
+      if esRRHH
+        input(type="text", name="nombre", placeholder="Nuevo Nombre", required)
+        input(type="text", name="apellido", placeholder="Nuevo Apellido", required)
+        input(type="text", name="usuario", placeholder="Nuevo Usuario", required)
+        select(name="sector", id="sector-editar", required)
+          option(value="") -- Seleccionar sector --
+        select(name="rol", id="rol-editar", required disabled)
+          option(value="") -- Seleccionar rol --
+
       input(type="password", name="passwordActual", placeholder="Contraseña actual", required)
       input(type="password", name="passwordNueva", placeholder="Nueva contraseña", required)
-      select(name="sector", id="sector-editar", required)
-        option(value="") -- Seleccionar sector --
-      select(name="rol", id="rol-editar", required disabled)
-        option(value="") -- Seleccionar rol --
-      button(type="submit") Editar
 
+      button(type="submit") Editar
 
   link(rel="stylesheet", href="/css/empleados.css")
   link(rel="stylesheet", href="/css/styles.css")
+
+  script.
+    window.usuario = !{JSON.stringify(usuario)};
+
   script(src="/js/empleados.js")

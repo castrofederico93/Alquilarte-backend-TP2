@@ -8,22 +8,23 @@ const {
   deleteTarea,
   obtenerTareas
 } = require('./tareas.controller');
+const verificarToken = require('../../middlewares/auth');
 
-// la vista con Pug 
-router.get('/vista', async (req, res) => {
+// Vista con Pug protegida por JWT
+router.get('/vista', verificarToken, async (req, res) => {
   try {
     const tareas = await obtenerTareas();
-    res.render('tareas', { tareas });
+    res.render('tareas', { tareas, usuario: req.usuario });
   } catch (error) {
     res.status(500).send('Error al cargar la vista');
   }
 });
 
-//  rutas CRUD para thunder client
-router.get('/', getAllTareas);
-router.get('/:id', getTareaById);
-router.post('/', createTarea);
-router.put('/:id', updateTarea);
-router.delete('/:id', deleteTarea);
+// Rutas CRUD para Thunder Client
+router.get('/', verificarToken, getAllTareas);
+router.get('/:id', verificarToken, getTareaById);
+router.post('/', verificarToken, createTarea);
+router.put('/:id', verificarToken, updateTarea);
+router.delete('/:id', verificarToken, deleteTarea);
 
 module.exports = router;

@@ -12,8 +12,23 @@ const leerSectoresRoles = () => {
 // GET /empleados
 async function obtenerEmpleados(req, res, next) {
   try {
-    const empleados = await Empleado.find();
-    res.json(empleados);
+    const { sector, rol, id } = req.usuario;
+
+    const esRRHH = sector === 'Administración' && rol === 'Responsable de RRHH';
+
+    if (esRRHH) {
+      // Puede ver todos
+      const empleados = await Empleado.find();
+      return res.json(empleados);
+    }
+
+    // Solo puede ver su propio perfil
+    const empleado = await Empleado.findById(id);
+    if (!empleado) {
+      return res.status(404).json({ mensaje: 'Empleado no encontrado' });
+    }
+
+    res.json([empleado]);
   } catch (err) {
     next(err);
   }
@@ -57,25 +72,48 @@ async function actualizarEmpleado(req, res, next) {
       throw err;
     }
 
-    // Si se solicita cambio de contraseña
-    if (req.body.passwordNueva) {
-      const coincide = await bcrypt.compare(req.body.passwordActual, empleado.password);
+    const { id: usuarioId, sector, rol } = req.usuario;
+    const esRRHH = sector === 'Administración' && rol === 'Responsable de RRHH';
+    const esElMismo = usuarioId === req.params.id;
+
+    // Verificar permisos
+    if (!esRRHH && !esElMismo) {
+      const err = new Error('No tiene permiso para editar este empleado');
+      err.status = 403;
+      throw err;
+    }
+
+    // Si no es RRHH, solo puede cambiar contraseña
+    if (!esRRHH) {
+      const { passwordActual, passwordNueva } = req.body;
+
+      if (!passwordActual || !passwordNueva) {
+        const err = new Error('Solo puede cambiar su contraseña');
+        err.status = 403;
+        throw err;
+      }
+
+      const coincide = await bcrypt.compare(passwordActual, empleado.password);
       if (!coincide) {
         const err = new Error('La contraseña actual es incorrecta');
         err.status = 400;
         throw err;
       }
 
-      // Hasheamos la nueva
-      empleado.password = await bcrypt.hash(req.body.passwordNueva, 10);
-    }
+      empleado.password = await bcrypt.hash(passwordNueva, 10);
+    } else {
+      // RRHH puede editar todo
+      empleado.nombre = req.body.nombre;
+      empleado.apellido = req.body.apellido;
+      empleado.usuario = req.body.usuario;
+      empleado.sector = req.body.sector;
+      empleado.rol = req.body.rol;
 
-    // Actualizar otros campos
-    empleado.nombre = req.body.nombre;
-    empleado.apellido = req.body.apellido;
-    empleado.usuario = req.body.usuario;
-    empleado.sector = req.body.sector;
-    empleado.rol = req.body.rol;
+      // Cambio de contraseña si se solicita
+      if (req.body.passwordNueva) {
+        empleado.password = await bcrypt.hash(req.body.passwordNueva, 10);
+      }
+    }
 
     await empleado.save();
     res.json(empleado);

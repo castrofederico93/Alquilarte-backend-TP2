@@ -10,5 +10,10 @@ html
   body
     .menu
       h2 Menú Principal
+
+      if usuario
+        p Bienvenido #{usuario.usuario} (#{usuario.rol} - #{usuario.sector})
+        a(href="/logout") Cerrar sesión
+
       a(href='/empleados-vista') Empleados
       a(href='/tareas/vista') Tareas
