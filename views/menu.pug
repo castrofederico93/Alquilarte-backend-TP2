@@ -13,7 +13,7 @@ html
 
       if usuario
         p Bienvenido #{usuario.nombre} #{usuario.apellido} (#{usuario.rol} - #{usuario.sector})
-        a(href="/logout") Cerrar sesión
+        a(href="/logout", class="logout-btn") Cerrar sesión
 
       a(href='/empleados-vista') Empleados
       a(href='/tareas/vista') Tareas
