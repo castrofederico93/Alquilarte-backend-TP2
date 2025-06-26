@@ -1,0 +1,46 @@
+extends layout
+
+block content
+  h1 Agenda de Visitas
+  form#visitaForm
+    input(type='hidden', id='visitaId')
+    .field
+      label(for='cliente') Cliente:
+      select(id='cliente', required)
+    .field
+      label(for='propiedad') Propiedad:
+      select(id='propiedad', required)
+    .field
+      label(for='fecha') Fecha:
+      input(type='date', id='fecha', required)
+    .field
+      label(for='hora') Hora:
+      input(type='time', id='hora', required)
+    .field
+      label(for='estado') Estado:
+      select(id='estado')
+        option(value='pendiente') pendiente
+        option(value='realizada') realizada
+        option(value='cancelada') cancelada
+    .field
+      label(for='agente') Agente:
+      select(id='agente')
+        option(value='') -- ninguno --
+    .field
+      label(for='observaciones') Observaciones:
+      textarea(id='observaciones')
+    button(type='submit') Guardar
+  hr
+  table#visitasTable
+    thead
+      tr
+        th Cliente
+        th Propiedad
+        th Fecha
+        th Hora
+        th Estado
+        th Agente
+        th Observaciones
+        th Acciones
+    tbody
+  script(src='/js/visitas.js')

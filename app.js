@@ -32,6 +32,8 @@ const empleadosRoutes = require("./modules/empleados/empleados.routes");
 const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
 const clientesRoutes = require('./modules/cliente/clientes.routes');
+const visitasRoutes = require('./modules/visitas/visitas.routes');
+
 
 
 app.use("/login", loginRoutes);
@@ -39,6 +41,8 @@ app.use("/tareas", tareasRoutes);
 app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
+app.use('/visitas', visitasRoutes);
+
 
 
 // Vistas Pug protegidas
@@ -60,6 +64,10 @@ app.get('/tareas/vista', verificarToken, (req, res) => {
 
 app.get('/clientes/vista', verificarToken, (req, res) => {
   res.render('clientes', { usuario: req.usuario });
+});
+
+app.get('/visitas/vista', verificarToken, (req, res) => {
+  res.render('visitas', { usuario: req.usuario });
 });
 
 // Cierre de sesión global
