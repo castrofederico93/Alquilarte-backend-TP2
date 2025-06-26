@@ -23,7 +23,6 @@ html
           label
             input(type="checkbox", name="estado", value="finalizada")
             | Finalizada
-
       div.filtro
         label(onclick="toggleCheckboxList('prioridad')") Prioridad
         div.checkbox-list#lista-prioridad
@@ -36,16 +35,24 @@ html
           label
             input(type="checkbox", name="prioridad", value="baja")
             | Baja
-
       div.filtro
         label(onclick="toggleCheckboxList('area')") Área
         div.checkbox-list#lista-area
+          
           label
-            input(type="checkbox", name="area", value="Ventas")
-            | Ventas
+            input(type="checkbox", name="area", value="Contabilidad")
+            | Contabilidad
+        
           label
             input(type="checkbox", name="area", value="Administración")
             | Administración
+          label
+            input(type="checkbox", name="area", value="Mantenimiento")
+            | Matenimiento
+          label
+            input(type="checkbox", name="area", value="Ventas")
+            | Ventas
+         
 
       button.boton-filtro(type="button", onclick="aplicarFiltros()") Filtrar
       button.boton-limpiar(type="button", onclick="limpiarFiltros()") Limpiar Filtros
@@ -63,15 +70,16 @@ html
             th Fecha
             th Acciones
         tbody
-          each tarea in tareas
+          each tarea, index in tareas
+            - const fechaFormateada = new Date(tarea.fecha).toLocaleDateString('es-AR')
             tr.fila-tarea(data-estado=tarea.estado, data-prioridad=tarea.prioridad, data-area=tarea.area)
-              td #{tarea._id}
+              td #{(index + 1)}
               td #{tarea.titulo}
               td #{tarea.descripcion}
               td #{tarea.estado}
               td #{tarea.prioridad}
               td #{tarea.area}
-              td #{tarea.fecha}
+              td #{fechaFormateada}
               td
                 button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
                 button.eliminar(type="button", onclick=`eliminarTarea('${tarea._id}')`) Eliminar
@@ -95,9 +103,12 @@ html
         option(value="alta") Alta
         option(value="media") Media
         option(value="baja") Baja
-      select(name="area")
-        option(value="Ventas") Ventas
+      select(name="area", required)
+        option(disabled selected value="") -- Seleccionar Área --
+        option(value="Contabilidad") Contabilidad
         option(value="Administración") Administración
+        option(value="Mantenimiento") Mantenimiento
+        option(value="Ventas") Ventas
       input(type="date", name="fecha", required)
       button(type="submit") Guardar Tarea
       button.boton-cancelar(type="button", onclick="limpiarFormulario()") Cancelar
