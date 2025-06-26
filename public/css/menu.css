@@ -43,3 +43,11 @@ body {
 .menu a:hover {
   background-color: #357ab8;
 }
+
+.menu a.logout-btn {
+  background-color: #dc3545;
+}
+
+.menu a.logout-btn:hover {
+  background-color: #a71d2a;
+}

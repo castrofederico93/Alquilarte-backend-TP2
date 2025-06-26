@@ -114,11 +114,3 @@ button:hover {
   background-color: #4a90e2;
   color: white;
 }
-
-.logout-btn {
-  background-color: #dc3545;
-}
-
-.logout-btn:hover {
-  background-color: #a71d2a;
-}
