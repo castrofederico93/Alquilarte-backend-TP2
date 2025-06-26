@@ -12,7 +12,6 @@ block content
         th Nombre
         th Apellido
         th Usuario
-        th Password
         th Rol
         th Sector
         th Acciones
@@ -29,6 +28,7 @@ block content
         input(type="text", name="apellido", placeholder="Apellido", required)
         input(type="text", name="usuario", placeholder="Usuario", required)
         input(type="password", name="password", placeholder="Contraseña", required)
+        input(type="password", name="passwordConfirmar", placeholder="Repetir contraseña", required)
         select(name="sector", id="sector-agregar", required)
           option(value="") -- Seleccionar sector --
         select(name="rol", id="rol-agregar", required disabled)
@@ -50,13 +50,21 @@ block content
         select(name="rol", id="rol-editar", required disabled)
           option(value="") -- Seleccionar rol --
 
-      input(type="password", name="passwordActual", placeholder="Contraseña actual", required)
-      input(type="password", name="passwordNueva", placeholder="Nueva contraseña", required)
+      if !esRRHH
+        input(type="password", name="passwordActual", placeholder="Contraseña actual", required)
+        input(type="password", name="passwordNueva", placeholder="Nueva contraseña", required)
+        input(type="password", name="passwordConfirmar", placeholder="Repetir nueva contraseña", required)
 
+      else
+        input(type="password", name="passwordNueva", placeholder="Nueva contraseña (opcional)")
+        input(type="password", name="passwordConfirmar", placeholder="Repetir nueva contraseña (opcional)")
+
+      button(type="button", id="cancelar-edicion") Cancelar
       button(type="submit") Editar
+  
+  a(href="/menu", class="btn-volver") Volver al menú
 
   link(rel="stylesheet", href="/css/empleados.css")
-  link(rel="stylesheet", href="/css/styles.css")
 
   script.
     window.usuario = !{JSON.stringify(usuario)};

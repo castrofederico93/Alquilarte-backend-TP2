@@ -20,19 +20,21 @@ async function login(req, res, next) {
     const empleado = await Empleado.findOne({ usuario });
 
     if (!empleado) {
-      return res.status(400).json({ mensaje: 'Usuario no válido' });
+      return res.status(400).render('login', { error: 'Usuario no válido' });
     }
 
     const coincide = await bcrypt.compare(password, empleado.password);
 
     if (!coincide) {
-      return res.status(400).json({ mensaje: 'Contraseña incorrecta' });
+      return res.status(400).render('login', { error: 'Contraseña incorrecta' });
     }
 
     // Generar token
     const payload = {
       id: empleado._id,
       usuario: empleado.usuario,
+      nombre: empleado.nombre,
+      apellido: empleado.apellido,
       rol: empleado.rol,
       sector: empleado.sector
     };

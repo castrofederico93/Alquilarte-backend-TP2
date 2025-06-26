@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  link(rel="stylesheet", href="/css/styles.css")
+  link(rel="stylesheet", href="/css/login.css")
 
   .login-container
     h1 Iniciar Sesión
@@ -11,5 +11,6 @@ block content
       input(type="password", name="password", placeholder="Contraseña", required)
       button(type="submit") Ingresar
 
-    if error
-      p.error-message #{error}
+  if error
+    script.
+      alert("#{error}");
