@@ -1,0 +1,136 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.contenedor {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.formulario-container, .lista-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 45%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.botones {
+  display: flex;
+  gap: 10px;
+}
+
+.botones button {
+  padding: 8px 15px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.botones button:hover {
+  background-color: #2980b9;
+}
+
+#filtroClientes {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+}
+
+#listaClientes {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.cliente-card {
+  background: #eee;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.btn-eliminar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#spinner {
+  text-align: center;
+  color: #888;
+  margin-top: 10px;
+}
+.icono {
+  width: 24px;       
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.icono-buscar {
+  width: 50px;
+  height: 50px;
+  margin-right: 6px;
+}
+
+.btn-eliminar img {
+  width: 20px;
+  height: 20px;
+}
+.div-busqueda {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.icono-buscar {
+  width: 50px;
+  height: 50px;
+}
+
+#filtro {
+  padding: 6px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 1;
+  max-width: 250px;
+}
+
+.icono-texto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.icono-texto img {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+}
