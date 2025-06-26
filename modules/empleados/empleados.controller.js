@@ -121,7 +121,7 @@ async function actualizarEmpleado(req, res, next) {
       empleado.rol = req.body.rol;
 
       // Cambio de contraseña si se solicita
-      if (req.body.passwordNueva) {
+      if (req.body.passwordNueva && req.body.passwordNueva.trim().length >= 4) {
         empleado.password = await bcrypt.hash(req.body.passwordNueva, 10);
       }
     }
