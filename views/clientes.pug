@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Clientes
+    link(rel='stylesheet', href='/css/clientes.css')
+
+  body
+    .contenedor
+      .formulario-container
+        h1 Nuevo Cliente
+        form#clienteForm
+          label Nombre:
+          input(type='text', name='nombre', required)
+          label Apellido:
+          input(type='text', name='apellido', required)
+          label DNI:
+          input(type='text', name='dni', required)
+          label Email:
+          input(type='email', name='email', required)
+          label Teléfono:
+          input(type='text', name='telefono')
+          .botones
+            button(type='submit') Agregar
+            button(type='button', id='limpiarBtn') Limpiar
+
+      .lista-container
+        h2 Clientes registrados
+        .div-busqueda
+          img(src='/img/buscar.gif', alt='Buscar', class='icono-buscar')
+          input#buscarInput(type='text', placeholder='Buscar por nombre o DNI...')
+
+        ul#listaClientes
+
+    script(src='/js/clientes.js')

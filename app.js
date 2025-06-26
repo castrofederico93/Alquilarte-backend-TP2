@@ -31,11 +31,15 @@ const tareasRoutes = require("./modules/tareas/tareas.routes");
 const empleadosRoutes = require("./modules/empleados/empleados.routes");
 const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
+const clientesRoutes = require('./modules/cliente/clientes.routes');
+
 
 app.use("/login", loginRoutes);
 app.use("/tareas", tareasRoutes);
 app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
+app.use('/clientes', clientesRoutes);
+
 
 // Vistas Pug protegidas
 app.get('/menu', verificarToken, (req, res) => {
@@ -52,6 +56,10 @@ app.get('/filtros/vista', verificarToken, (req, res) => {
 
 app.get('/tareas/vista', verificarToken, (req, res) => {
   res.render('tareas', { usuario: req.usuario });
+});
+
+app.get('/clientes/vista', verificarToken, (req, res) => {
+  res.render('clientes', { usuario: req.usuario });
 });
 
 // Cierre de sesión global
