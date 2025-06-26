@@ -5,10 +5,50 @@ html
     link(rel='stylesheet', href='/css/tareas.css')
     link(rel='stylesheet', href='/css/styles.css')
 
-    
   body
 
     h1(style="text-align:center") Lista de Tareas
+
+    // Filtros
+    div.filtro-container
+      div.filtro
+        label(onclick="toggleCheckboxList('estado')") Estado
+        div.checkbox-list#lista-estado
+          label
+            input(type="checkbox", name="estado", value="pendiente")
+            | Pendiente
+          label
+            input(type="checkbox", name="estado", value="en proceso")
+            | En proceso
+          label
+            input(type="checkbox", name="estado", value="finalizada")
+            | Finalizada
+
+      div.filtro
+        label(onclick="toggleCheckboxList('prioridad')") Prioridad
+        div.checkbox-list#lista-prioridad
+          label
+            input(type="checkbox", name="prioridad", value="alta")
+            | Alta
+          label
+            input(type="checkbox", name="prioridad", value="media")
+            | Media
+          label
+            input(type="checkbox", name="prioridad", value="baja")
+            | Baja
+
+      div.filtro
+        label(onclick="toggleCheckboxList('area')") Área
+        div.checkbox-list#lista-area
+          label
+            input(type="checkbox", name="area", value="Ventas")
+            | Ventas
+          label
+            input(type="checkbox", name="area", value="Administración")
+            | Administración
+
+      button.boton-filtro(type="button", onclick="aplicarFiltros()") Filtrar
+      button.boton-limpiar(type="button", onclick="limpiarFiltros()") Limpiar Filtros
 
     if tareas.length
       table
@@ -24,7 +64,7 @@ html
             th Acciones
         tbody
           each tarea in tareas
-            tr(class=tarea.estado.replace(' ', '-'))
+            tr.fila-tarea(data-estado=tarea.estado, data-prioridad=tarea.prioridad, data-area=tarea.area)
               td #{tarea._id}
               td #{tarea.titulo}
               td #{tarea.descripcion}
@@ -61,26 +101,5 @@ html
       input(type="date", name="fecha", required)
       button(type="submit") Guardar Tarea
       button.boton-cancelar(type="button", onclick="limpiarFormulario()") Cancelar
-
-    h1(style="text-align: center") Filtros
-
-    div.menu
-      a(onclick='toggleSubmenu("submenu-estado")') Estado
-      a(onclick='toggleSubmenu("submenu-prioridad")') Prioridad
-      a(onclick='toggleSubmenu("submenu-area")') Área
-
-    div.submenu#submenu-estado
-      a(href='/filtros/vista?estado=pendiente') Pendiente  
-      a(href='/filtros/vista?estado=en%20proceso') En proceso 
-      a(href='/filtros/vista?estado=finalizada') Finalizada 
-
-    div.submenu#submenu-prioridad
-      a(href='/filtros/vista?prioridad=alta') Alta
-      a(href='/filtros/vista?prioridad=media') Media 
-      a(href='/filtros/vista?prioridad=baja') Baja
-
-    div.submenu#submenu-area
-      a(href='/filtros/vista?area=ventas') Ventas
-      a(href='/filtros/vista?area=administración') Administración
 
     script(src='/js/tareas.js')

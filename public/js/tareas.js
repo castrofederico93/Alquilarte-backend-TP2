@@ -73,3 +73,44 @@ function limpiarFormulario() {
   form.reset();
   form.id.value = '';
 }
+
+// FUNCIONES PARA FILTROS
+
+function toggleCheckboxList(id) {
+  document.querySelectorAll('.checkbox-list').forEach(list => {
+    if (list.id !== 'lista-' + id) {
+      list.classList.remove('show');
+    }
+  });
+  const el = document.getElementById('lista-' + id);
+  el.classList.toggle('show');
+}
+
+function aplicarFiltros() {
+  const estados = [...document.querySelectorAll('input[name="estado"]:checked')].map(e => e.value);
+  const prioridades = [...document.querySelectorAll('input[name="prioridad"]:checked')].map(e => e.value);
+  const areas = [...document.querySelectorAll('input[name="area"]:checked')].map(e => e.value);
+
+  document.querySelectorAll('.fila-tarea').forEach(row => {
+    const visible =
+      (estados.length === 0 || estados.includes(row.dataset.estado)) &&
+      (prioridades.length === 0 || prioridades.includes(row.dataset.prioridad)) &&
+      (areas.length === 0 || areas.includes(row.dataset.area));
+    row.style.display = visible ? '' : 'none';
+  });
+}
+
+function limpiarFiltros() {
+  document.querySelectorAll('.checkbox-list input[type="checkbox"]').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  document.querySelectorAll('.fila-tarea').forEach(row => {
+    row.style.display = '';
+  });
+}
+
+document.addEventListener('click', function(event) {
+  if (!event.target.closest('.filtro')) {
+    document.querySelectorAll('.checkbox-list').forEach(el => el.classList.remove('show'));
+  }
+});
