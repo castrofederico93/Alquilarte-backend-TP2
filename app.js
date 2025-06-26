@@ -12,7 +12,6 @@ const errorHandler = require('./middlewares/errorHandler');
 const verificarToken = require('./middlewares/auth');
 
 const app = express();
-const port = 3000;
 
 // Configuración del motor de vistas
 app.set('view engine', 'pug');
@@ -85,7 +84,4 @@ app.get('/error', (req, res) => {
 // Middleware de errores
 app.use(errorHandler);
 
-// Iniciar servidor
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
-});
+module.exports = app;

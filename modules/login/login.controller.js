@@ -34,21 +34,26 @@ async function login(req, res, next) {
       id: empleado._id,
       usuario: empleado.usuario,
       rol: empleado.rol,
-      sector: empleado.sector,
+      sector: empleado.sector
     };
-
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
 
-    // Guardar el token como cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: false, // ponelo en true si usás HTTPS
-      maxAge: 60 * 60 * 1000 // 1 hora
-    });
+    // Detectar si es un cliente API (tests o Postman) o navegador
+    const aceptaJSON = req.headers.accept && req.headers.accept.includes('application/json');
 
-    // Redirigir al menú
-    return res.redirect('/menu');
+    if (aceptaJSON) {
+      // Para supertest o Postman
+      return res.json({ mensaje: 'Login exitoso', token });
+    } else {
+      // Para el navegador: guardar cookie y redirigir
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, // Cambiar a true si usás HTTPS
+        maxAge: 60 * 60 * 1000 // 1 hora
+      });
+      return res.redirect('/menu');
+    }
 
   } catch (err) {
     next(err);

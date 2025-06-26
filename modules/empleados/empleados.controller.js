@@ -2,6 +2,7 @@ const Empleado = require('../../models/Empleado');
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const { isValidObjectId } = require('mongoose');
 
 // Lee sectores del JSON
 const leerSectoresRoles = () => {
@@ -37,6 +38,12 @@ async function obtenerEmpleados(req, res, next) {
 // POST /empleados
 async function crearEmpleado(req, res, next) {
   try {
+    const { sector, rol } = req.usuario || {};
+
+    if (sector !== 'Administración' || rol !== 'Responsable de RRHH') {
+      return res.status(403).json({ mensaje: 'No tiene permiso para crear empleados' });
+    }
+
     const existe = await Empleado.findOne({ usuario: req.body.usuario });
     if (existe) {
       const err = new Error('El nombre de usuario ya está en uso');
@@ -65,6 +72,10 @@ async function crearEmpleado(req, res, next) {
 // PUT /empleados/:id
 async function actualizarEmpleado(req, res, next) {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ mensaje: 'ID inválido' });
+    }
+
     const empleado = await Empleado.findById(req.params.id);
     if (!empleado) {
       const err = new Error('Empleado no encontrado');
@@ -125,6 +136,19 @@ async function actualizarEmpleado(req, res, next) {
 // DELETE /empleados/:id
 async function eliminarEmpleado(req, res, next) {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ mensaje: 'ID inválido' });
+    }
+
+    // Verificar permisos antes de buscar en la base
+    const { sector, rol } = req.usuario || {};
+    const esRRHH = sector === 'Administración' && rol === 'Responsable de RRHH';
+
+    if (!esRRHH) {
+      return res.status(403).json({ mensaje: 'No tiene permiso para eliminar empleados' });
+    }
+
+    // Buscar y eliminar solo si tiene permisos
     const eliminado = await Empleado.findByIdAndDelete(req.params.id);
     if (!eliminado) {
       const err = new Error('Empleado no encontrado');
