@@ -76,7 +76,6 @@ function cargarEmpleados() {
           <td>${emp.nombre}</td>
           <td>${emp.apellido}</td>
           <td>${emp.usuario}</td>
-          <td>****</td>
           <td>${emp.rol}</td>
           <td>${emp.sector}</td>
           <td>${botones}</td>
@@ -133,13 +132,22 @@ function capitalizar(texto) {
 if (formAgregar) {
   formAgregar.addEventListener('submit', async e => {
     e.preventDefault();
+
+    const pass1 = formAgregar.password?.value || '';
+    const pass2 = formAgregar.passwordConfirmar?.value || '';
+
+    if (pass1 !== pass2) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
     const datosRaw = Object.fromEntries(new FormData(formAgregar));
 
     const datos = {
       nombre: capitalizar(datosRaw.nombre),
       apellido: capitalizar(datosRaw.apellido),
       usuario: datosRaw.usuario.toLowerCase(),
-      password: datosRaw.password,
+      password: pass1,
       sector: datosRaw.sector,
       rol: datosRaw.rol
     };
@@ -179,15 +187,31 @@ if (formEditar) {
     e.preventDefault();
     const id = formEditar.id.value;
 
+    const pass1 = formEditar.passwordNueva?.value || '';
+    const pass2 = formEditar.passwordConfirmar?.value || '';
+
+    if (pass1 || pass2) {
+      if (pass1 !== pass2) {
+        alert('Las contraseñas no coinciden');
+        return;
+      }
+    }
+
     const datos = {
-      nombre: capitalizar(formEditar.nombre.value),
-      apellido: capitalizar(formEditar.apellido.value),
-      usuario: formEditar.usuario.value.toLowerCase(),
-      passwordActual: formEditar.passwordActual.value,
-      passwordNueva: formEditar.passwordNueva.value,
-      rol: formEditar.rol.value,
-      sector: formEditar.sector.value
+      nombre: capitalizar(formEditar.nombre?.value || ''),
+      apellido: capitalizar(formEditar.apellido?.value || ''),
+      usuario: formEditar.usuario?.value.toLowerCase() || '',
+      rol: formEditar.rol?.value || '',
+      sector: formEditar.sector?.value || ''
     };
+
+    if (formEditar.passwordActual) {
+      datos.passwordActual = formEditar.passwordActual.value;
+    }
+
+    if (formEditar.passwordNueva) {
+      datos.passwordNueva = pass1;
+    }
 
     try {
       const res = await fetch('/empleados/' + id, {
@@ -216,6 +240,14 @@ if (mostrarAlta) {
   mostrarAlta.addEventListener('click', () => {
     const seccionAlta = document.getElementById('seccion-alta');
     seccionAlta.style.display = (seccionAlta.style.display === 'none') ? 'block' : 'none';
+  });
+}
+
+const cancelarEdicion = document.getElementById('cancelar-edicion');
+if (cancelarEdicion) {
+  cancelarEdicion.addEventListener('click', () => {
+    formEditar.reset();
+    document.getElementById('seccion-editar').style.display = 'none';
   });
 }
 

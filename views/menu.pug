@@ -12,10 +12,8 @@ html
       h2 Menú Principal
 
       if usuario
-        p Bienvenido #{usuario.usuario} (#{usuario.rol} - #{usuario.sector})
-        a(href="/logout") Cerrar sesión
+        p Bienvenido #{usuario.nombre} #{usuario.apellido} (#{usuario.rol} - #{usuario.sector})
 
       a(href='/empleados-vista') Empleados
       a(href='/tareas/vista') Tareas
       a(href='/clientes/vista') Clientes 
-      a(href='/visitas/vista') Visitas 
