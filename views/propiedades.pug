@@ -1,0 +1,45 @@
+doctype html
+html
+  head
+    title Lista de Propiedades
+    link(rel='stylesheet', href='/css/propiedades.css')
+    link(rel='stylesheet', href='/css/styles.css')
+
+    
+  body
+
+    h1(style="text-align:center") Lista de Propiedades
+
+    if tareas.length
+      table
+        thead
+          tr
+            th ID
+            th Direccion
+            th Tipo
+            th Estado
+            th Ambientes
+            th Superficie
+            th Descripcion
+            th Precio
+            th Observaciones
+
+        tbody
+          each Propiedades in Propiedades
+            tr(class=propiedad.estado.replace(' ', '-'))
+              td #{propiedad._id}
+              td #{propiedad.direccion}
+              td #{propiedad.tipo}
+              td #{propiedad.estado}
+              td #{propiedad.ambientes}
+              td #{propiedad.superficie}
+              td #{propiedad.precio}
+              td #{propiedad.observaciones}
+              td
+                button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
+                button.eliminar(type="button", onclick=`eliminarTarea('${tarea._id}')`) Eliminar
+    else
+      p No hay tareas para mostrar.
+
+    div#mensaje
+
