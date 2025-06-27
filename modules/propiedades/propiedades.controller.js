@@ -1,0 +1,1 @@
+const Propiedades = require('../models/Propiedades')
