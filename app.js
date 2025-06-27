@@ -87,9 +87,4 @@ app.get('/error', (req, res) => {
 // Middleware de errores
 app.use(errorHandler);
 
-
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en puerto ${PORT}`);
-});
-
 module.exports = app;
