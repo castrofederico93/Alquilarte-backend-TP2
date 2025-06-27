@@ -1,5 +1,5 @@
 const { json } = require('express');
-const Propiedad = require('../../models/propiedades');
+const Propiedad = require('../../models/Propiedades');
 const mongoose = require('mongoose')
 
 //metodo get 
