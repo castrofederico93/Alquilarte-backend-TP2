@@ -39,7 +39,7 @@ form.addEventListener('submit', async (e) => {
 });
 
 function cargarTareaEnFormulario(tarea) {
-  form.id.value = tarea.id;
+  form.id.value = tarea._id;
   form.titulo.value = tarea.titulo;
   form.descripcion.value = tarea.descripcion;
   form.estado.value = tarea.estado;
