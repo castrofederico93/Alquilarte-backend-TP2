@@ -53,6 +53,8 @@ function cargarTareaEnFormulario(tarea) {
     form.asignadoA.value = "";
   }
 
+  form.area.dispatchEvent(new Event('change'));
+
   window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
 }
 
