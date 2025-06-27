@@ -14,7 +14,8 @@ const verificarToken = require('../../middlewares/auth');
 router.get('/vista', verificarToken, async (req, res) => {
   try {
     const tareas = await obtenerTareas();
-    res.render('tareas', { tareas, usuario: req.usuario });
+    const empleados = await require('../../models/Empleado').find();
+    res.render('tareas', { tareas, empleados, usuario: req.usuario });
   } catch (error) {
     res.status(500).send('Error al cargar la vista');
   }

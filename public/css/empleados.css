@@ -22,9 +22,13 @@ table {
   border-collapse: collapse;
 }
 
+table tr:hover {
+  background-color: rgba(74, 144, 226, 0.1);
+}
+
 th, td {
   padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
   text-align: left;
 }
 
@@ -113,4 +117,21 @@ button:hover {
 .btn-volver:hover {
   background-color: #4a90e2;
   color: white;
+}
+
+.btn-accion {
+  display: inline-block;
+  width: auto;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  margin-right: 0.3rem;
+  border-radius: 6px;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+  background-color: #a71d2a;
 }
