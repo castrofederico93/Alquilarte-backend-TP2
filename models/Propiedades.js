@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 
 const PropiedadSchema = new mongoose.Schema({
-
-    direccion:    { tipe: String, required: true },
-    tipo:         { tipe: String, required: true },
-    ambientes:    { tipe: Number, required: true },
-    superficie:   { tipe: Number, required: true },
-    descripcion:  { tipe: String, required: true },
-    estado:       { tipe: String, required: true },
-    precio:       { tipe: Number, required: true },
-    observaciones:{ tipe: String, required: false },
-},{
-    timestamps: true
+    direccion:    { type: String, required: true },
+    tipo:         { type: String, required: true },
+    ambientes:    { type: Number, required: true },
+    superficie:   { type: Number, required: true },
+    descripcion:  { type: String, required: true },
+    estado:       { type: String, required: true },
+    precio:       { type: Number, required: true },
+    observaciones:{ type: String, required: false },
+}, {
+    timestamps: true,
+    collection: 'propiedades'
 });
 
 module.exports = mongoose.model('Propiedad', PropiedadSchema);

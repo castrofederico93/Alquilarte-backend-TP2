@@ -31,8 +31,6 @@ const empleadosRoutes = require("./modules/empleados/empleados.routes");
 const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
 const clientesRoutes = require('./modules/cliente/clientes.routes');
-const propiedadesRoutes = require('./modules/propiedades/propiedades.routes');
-
 
 
 app.use("/login", loginRoutes);
@@ -40,7 +38,6 @@ app.use("/tareas", tareasRoutes);
 app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
-app.use('/propiedades', propiedadesRoutes);
 
 
 // Vistas Pug protegidas
@@ -87,8 +84,4 @@ app.get('/error', (req, res) => {
 // Middleware de errores
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en puerto ${PORT}`);
-});
 module.exports = app;
