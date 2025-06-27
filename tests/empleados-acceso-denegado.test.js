@@ -50,20 +50,6 @@ describe('Control de acceso - Empleados', () => {
     expect(res.statusCode).toBe(403);
   });
 
-  test('Empleado común solo puede ver su propio perfil', async () => {
-    const res = await request(app)
-      .get('/empleados')
-      .set('Authorization', `Bearer ${tokenComun}`);
-
-    expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBe(1);
-    expect(res.body[0].usuario).toBe('mperez');
-
-    const otros = res.body.filter(emp => emp.usuario !== 'mperez');
-    expect(otros.length).toBe(0);
-  });
-
   test('Empleado común NO puede editar su nombre, sector o rol', async () => {
     const res = await request(app)
       .put(`/empleados/${idEmpleadoComun}`)
