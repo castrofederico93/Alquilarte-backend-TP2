@@ -6,7 +6,8 @@ const TareaSchema = new mongoose.Schema({
   area: { type: String, required: true },
   estado: { type: String, required: true },
   prioridad: { type: String, required: true },
-  fecha: { type: Date, required: true }
+  fecha: { type: Date, required: true },
+  asignadoA: { type: mongoose.Schema.Types.ObjectId, ref: 'Empleado', default: null }
 }, {
   timestamps: true
 });

@@ -66,10 +66,10 @@ function cargarEmpleados() {
 
         let botones = '';
         if (esRRHH || esElMismo) {
-          botones += `<button onclick="prepararEdicion('${emp._id}', '${emp.nombre}', '${emp.apellido}', '${emp.usuario}', '${emp.rol}', '${emp.sector}')">Editar</button>`;
+          botones += `<button class="btn-accion" onclick="prepararEdicion('${emp._id}', '${emp.nombre}', '${emp.apellido}', '${emp.usuario}', '${emp.rol}', '${emp.sector}')">Editar</button>`;
         }
         if (esRRHH) {
-          botones += `<button onclick="eliminarEmpleado('${emp._id}')">Eliminar</button>`;
+          botones += `<button class="btn-accion btn-eliminar" onclick="eliminarEmpleado('${emp._id}')">Eliminar</button>`;
         }
 
         tr.innerHTML = `

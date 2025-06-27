@@ -38,21 +38,18 @@ html
       div.filtro
         label(onclick="toggleCheckboxList('area')") Área
         div.checkbox-list#lista-area
-          
           label
             input(type="checkbox", name="area", value="Contabilidad")
             | Contabilidad
-        
           label
             input(type="checkbox", name="area", value="Administración")
             | Administración
           label
             input(type="checkbox", name="area", value="Mantenimiento")
-            | Matenimiento
+            | Mantenimiento
           label
             input(type="checkbox", name="area", value="Ventas")
             | Ventas
-         
 
       button.boton-filtro(type="button", onclick="aplicarFiltros()") Filtrar
       button.boton-limpiar(type="button", onclick="limpiarFiltros()") Limpiar Filtros
@@ -67,11 +64,14 @@ html
             th Estado
             th Prioridad
             th Área
+            th Asignado a
             th Fecha
             th Acciones
         tbody
           each tarea, index in tareas
-            - const fechaFormateada = new Date(tarea.fecha).toLocaleDateString('es-AR')
+            - const fechaObj = new Date(tarea.fecha)
+            - const fechaLocal = new Date(fechaObj.getTime() + fechaObj.getTimezoneOffset() * 60000) // corrige offset
+            - const fechaFormateada = fechaLocal.toLocaleDateString('es-AR')
             tr.fila-tarea(data-estado=tarea.estado, data-prioridad=tarea.prioridad, data-area=tarea.area)
               td #{(index + 1)}
               td #{tarea.titulo}
@@ -79,6 +79,7 @@ html
               td #{tarea.estado}
               td #{tarea.prioridad}
               td #{tarea.area}
+              td #{tarea.asignadoA ? tarea.asignadoA.nombre + ' ' + tarea.asignadoA.apellido : 'Sin asignar'}
               td #{fechaFormateada}
               td
                 button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
@@ -109,6 +110,12 @@ html
         option(value="Administración") Administración
         option(value="Mantenimiento") Mantenimiento
         option(value="Ventas") Ventas
+
+      select(name="asignadoA")
+        option(value="") -- Sin asignar --
+        each empleado in empleados
+          option(value=empleado._id)= `${empleado.nombre} ${empleado.apellido}`
+
       input(type="date", name="fecha", required)
       button(type="submit") Guardar Tarea
       button.boton-cancelar(type="button", onclick="limpiarFormulario()") Cancelar

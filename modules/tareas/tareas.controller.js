@@ -1,4 +1,5 @@
 const Tarea = require('../../models/Tarea');
+const Empleado = require('../../models/Empleado');
 
 async function getAllTareas(req, res) {
   try {
@@ -7,7 +8,7 @@ async function getAllTareas(req, res) {
     if (req.query.prioridad) filtros.prioridad = req.query.prioridad;
     if (req.query.area) filtros.area = req.query.area;
 
-    const tareas = await Tarea.find(filtros);
+    const tareas = await Tarea.find(filtros).populate('asignadoA');
     res.json(tareas);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener las tareas' });
@@ -16,7 +17,7 @@ async function getAllTareas(req, res) {
 
 async function getTareaById(req, res) {
   try {
-    const tarea = await Tarea.findById(req.params.id);
+    const tarea = await Tarea.findById(req.params.id).populate('asignadoA');
     if (tarea) {
       res.json(tarea);
     } else {
@@ -29,7 +30,18 @@ async function getTareaById(req, res) {
 
 async function createTarea(req, res) {
   try {
-    const nuevaTarea = new Tarea(req.body);
+    const datosTarea = { ...req.body };
+
+    if (datosTarea.asignadoA) {
+      const empleado = await Empleado.findById(datosTarea.asignadoA);
+      if (!empleado) {
+        return res.status(400).json({ mensaje: 'Empleado asignado no válido' });
+      }
+    } else {
+      datosTarea.asignadoA = null;
+    }
+
+    const nuevaTarea = new Tarea(datosTarea);
     await nuevaTarea.save();
     res.status(201).json(nuevaTarea);
   } catch (error) {
@@ -39,7 +51,18 @@ async function createTarea(req, res) {
 
 async function updateTarea(req, res) {
   try {
-    const tarea = await Tarea.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const datosTarea = { ...req.body };
+
+    if (datosTarea.asignadoA) {
+      const empleado = await Empleado.findById(datosTarea.asignadoA);
+      if (!empleado) {
+        return res.status(400).json({ mensaje: 'Empleado asignado no válido' });
+      }
+    } else {
+      datosTarea.asignadoA = null;
+    }
+
+    const tarea = await Tarea.findByIdAndUpdate(req.params.id, datosTarea, { new: true }).populate('asignadoA');
     if (tarea) {
       res.json(tarea);
     } else {
@@ -64,7 +87,7 @@ async function deleteTarea(req, res) {
 }
 
 async function obtenerTareas() {
-  return await Tarea.find();
+  return await Tarea.find().populate('asignadoA');
 }
 
 module.exports = {
