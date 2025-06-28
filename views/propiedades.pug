@@ -55,7 +55,7 @@ html
     else
       p No hay tareas para mostrar.
 
-button(type="button", onclick="toggleform('formCrearPropiedad')") Agregar nueva propiedad
+h2 Agregar/editar propiedad
 
 form#formCrearPropiedad(method="POST", action="/propiedades", onsubmit="event.preventDefault(); guardarPropiedad()")
   input(type="hidden", name="id", id="propiedadId") 
@@ -63,28 +63,45 @@ form#formCrearPropiedad(method="POST", action="/propiedades", onsubmit="event.pr
   
 
   p(style="font-size: 12px; color: gray") (*) Campo obligatorio
+  
+  //Campos del formulario//
+
   label(for="direccion") Direccion: *
   input(type="text", name="direccion", id="direccion", required)
    
+
+
   label(for="tipo") Tipo: *
-  input(type="text", name="tipo", id="tipo", required)
+  select(name="tipo", id="tipo", required)
+    option(value="") Seleccione el tipo de propiedad 
+    option(value="Casa") Casa
+    option(value="Departamento") Departamento
 
   label(for="estado") Estado: *
-  input(type="text", name="estado", id="estado", required)
+  select(name="estado", id="estado", required)
+    option(value="") Seleccione el estado de la propiedad
+    option(value="Disponible") Disponible
+    option(value="Reservada") Reservada
    
 
   label(for="ambientes") Ambientes: *
-  input(type="text", name="ambientes", id="ambientes", required)
+  select(name="ambientes", id="ambientes", required)
+    option(value="") Seleccione la cantidad de ambientes 
+    option(value="1") 1
+    option(value="2") 2
+    option(value="3") 3
+    option(value="4") 4
+    option(value="5") 5
    
   label(for="superficie") Superficie: *
-  input(type="superficie", name="superficie", id="superficie", required)
+  input(type="number", name="superficie", id="superficie", required)
    
   label(for="descripcion") Descripcion: *
   input(type="text", name="descripcion", id="descripcion", required)
  
    
   label(for="precio") Precio: *
-  input(type="text", name="precio", id="precio", required)
+  input(type="number", name="precio", id="precio", required)
    
   label(for="observaciones") Observaciones: 
   input(name="observaciones", id="observaciones")
