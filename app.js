@@ -40,6 +40,8 @@ app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/propiedades', propiedadesRoutes);
 
+
+
 // Vistas Pug protegidas
 app.get('/menu', verificarToken, (req, res) => {
   res.render('menu', { usuario: req.usuario });
