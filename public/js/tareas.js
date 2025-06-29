@@ -18,6 +18,7 @@ form.addEventListener('submit', async (e) => {
     prioridad: form.prioridad.value,
     area: form.area.value,
     fecha: form.fecha.value,
+    asignadoA: form.asignadoA.value || null // asignación opcional
   };
 
   const id = form.id.value;
@@ -38,13 +39,22 @@ form.addEventListener('submit', async (e) => {
 });
 
 function cargarTareaEnFormulario(tarea) {
-  form.id.value = tarea.id;
+  form.id.value = tarea._id;
   form.titulo.value = tarea.titulo;
   form.descripcion.value = tarea.descripcion;
   form.estado.value = tarea.estado;
   form.prioridad.value = tarea.prioridad;
   form.area.value = tarea.area;
   form.fecha.value = tarea.fecha;
+
+  if (tarea.asignadoA) {
+    form.asignadoA.value = tarea.asignadoA._id;
+  } else {
+    form.asignadoA.value = "";
+  }
+
+  form.area.dispatchEvent(new Event('change'));
+
   window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
 }
 
@@ -73,6 +83,34 @@ function limpiarFormulario() {
   form.reset();
   form.id.value = '';
 }
+
+// Select asignadoA según área elegida
+form.area.addEventListener('change', async () => {
+  const area = form.area.value;
+  const selectAsignado = form.asignadoA;
+
+  if (!area) {
+    selectAsignado.innerHTML = '<option value="">-- Sin asignar --</option>';
+    return;
+  }
+
+  try {
+    const res = await fetch(`/empleados/por-sector/${encodeURIComponent(area)}`);
+    if (!res.ok) throw new Error('Error al cargar empleados');
+
+    const empleados = await res.json();
+    selectAsignado.innerHTML = '<option value="">-- Sin asignar --</option>';
+    empleados.forEach(emp => {
+      const option = document.createElement('option');
+      option.value = emp._id;
+      option.textContent = `${emp.nombre} ${emp.apellido}`;
+      selectAsignado.appendChild(option);
+    });
+  } catch (err) {
+    console.error(err);
+    mostrarMensaje('Error al cargar empleados del sector', false);
+  }
+});
 
 // FUNCIONES PARA FILTROS
 

@@ -1,50 +1,108 @@
-// public/js/propiedades.js
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('propiedades-container');
-  const btnAll = document.getElementById('f-all');
-  const btnDisp = document.getElementById('f-disponible');
-  const btnAlq = document.getElementById('f-alquilada');
+const { json } = require("express");
 
-  btnAll.addEventListener('click', () => loadProps());
-  btnDisp.addEventListener('click', () => loadProps('disponible'));
-  btnAlq.addEventListener('click', () => loadProps('alquilada'));
+function editarPropiedad(boton){
 
-  loadProps(); // carga inicial
 
-  async function loadProps(estado) {
-    let url = '/propiedades';
-    if (estado) url += `/estado/${estado}`;
-    try {
-      const res = await fetch(url, { headers: { 'Authorization': localStorage.getItem('token') } });
-      const props = await res.json();
-      render(props);
-      setActiveButton(estado);
-    } catch (e) {
-      console.error(e);
-    }
+    document.getElementById('propiedadId').value = boton.dataset.id;
+    document.getElementById('direccion').value = boton.dataset.direccion;
+    document.getElementById('tipo').value = boton.dataset.tipo;
+    document.getElementById('ambientes').value = boton.dataset.ambientes;
+    document.getElementById('superficie').value = boton.dataset.superficie;
+    document.getElementById('descripcion').value = boton.dataset.descripcion;
+    document.getElementById('estado').value = boton.dataset.estado;
+    document.getElementById('precio').value = boton.dataset.precio;
+    document.getElementById('observaciones').value = boton.dataset.observaciones;
+    document.getElementById('methodField').value = 'PUT';
+
+}
+
+async function guardarPropiedad() {
+  const id = document.getElementById('propiedadId').value;
+  const method = document.getElementById('methodField').value;
+
+  const datos = {
+    direccion: document.getElementById('direccion').value,
+    tipo: document.getElementById('tipo').value,
+    estado: document.getElementById('estado').value,
+    ambientes: document.getElementById('ambientes').value,
+    superficie: document.getElementById('superficie').value,
+    descripcion: document.getElementById('descripcion').value,
+    precio: document.getElementById('precio').value,
+    observaciones: document.getElementById('observaciones').value
   }
+ 
+  const url = method === 'POST' ? '/propiedades' : `/propiedades/${id}`;
 
-  function render(props) {
-    container.innerHTML = '';
-    props.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'propiedad-card';
-      card.innerHTML = `
-        <h2>${p.tipo} · ${p.direccion}</h2>
-        <p><strong>Ambientes:</strong> ${p.ambientes} · <strong>Superficie:</strong> ${p.superficie} m²</p>
-        <p><strong>Precio:</strong> $${p.precio}</p>
-        <p><strong>Estado:</strong> ${p.estado}</p>
-        <p>${p.descripcion || ''}</p>
-        <p><em>${p.observaciones || ''}</em></p>
-      `;
-      container.appendChild(card);
+      try{
+        const respuesta = await fetch(
+          url,{method: method, 
+              headers: {'Content-Type':'application/json'}, 
+              body: JSON.stringify(datos),}
+        )
+
+        if (!respuesta.ok){throw new Error('Error al guardar la propiedad')};
+
+
+      alert('Operacion exitosa');
+
+      limpiarFormulario();
+
+      location.reload();
+        
+
+
+      }catch(error){
+        alert('Error' + error.message);
+      }
+
+}
+
+
+function limpiarFormulario() {
+
+  const form = document.getElementById('formCrearPropiedad');
+
+  form.reset();
+
+  document.getElementById('methodField').value = 'POST';
+  document.getElementById('propiedadId').value = '';
+
+
+
+}
+
+async function eliminarPropiedad(id){
+
+  if(!confirm(`Estas seguro que quieres eliminar la propiedad con id (${id})?`)) {
+    return
+  }
+  
+  try {
+    const respuesta = await fetch(`/propiedades/${id}`,{
+      method:'DELETE'
     });
+
+    if(!respuesta.ok)
+      throw new error('Error al eliminar la propiedad');
+
+    alert('La propiedad se elimino correctamente');
+
+    location.reload();
+
+
+    
+
+  }catch(error){
+    console.error('Error al eliminar la propiedad');
+    alert('Error al eliminar la propiedad');
+
   }
 
-  function setActiveButton(estado) {
-    [btnAll, btnDisp, btnAlq].forEach(b => b.classList.remove('active'));
-    if (!estado) btnAll.classList.add('active');
-    else if (estado === 'disponible') btnDisp.classList.add('active');
-    else if (estado === 'alquilada') btnAlq.classList.add('active');
-  }
-});
+
+}
+
+
+
+
+
+

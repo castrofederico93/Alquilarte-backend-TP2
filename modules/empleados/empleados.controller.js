@@ -13,23 +13,8 @@ const leerSectoresRoles = () => {
 // GET /empleados
 async function obtenerEmpleados(req, res, next) {
   try {
-    const { sector, rol, id } = req.usuario;
-
-    const esRRHH = sector === 'Administración' && rol === 'Responsable de RRHH';
-
-    if (esRRHH) {
-      // Puede ver todos
-      const empleados = await Empleado.find();
-      return res.json(empleados);
-    }
-
-    // Solo puede ver su propio perfil
-    const empleado = await Empleado.findById(id);
-    if (!empleado) {
-      return res.status(404).json({ mensaje: 'Empleado no encontrado' });
-    }
-
-    res.json([empleado]);
+    const empleados = await Empleado.find();
+    res.json(empleados);
   } catch (err) {
     next(err);
   }
