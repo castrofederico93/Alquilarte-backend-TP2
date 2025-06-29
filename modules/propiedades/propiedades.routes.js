@@ -10,12 +10,13 @@
   } = require('./propiedades.controller');
 
   const verificarToken = require('../../middlewares/auth');
+  
 
   // Ruta que devuelve JSON para cuando hacemos una API mas que nada
   router.get('/', verificarToken, obtenerPropiedadJSON);
 
   // Ruta que devuelve la vista Pug - esta es para el navegador
-  router.get('/vista', obtenerPropiedadVista);
+  router.get('/vista',verificarToken, obtenerPropiedadVista);
 
   router.post('/', verificarToken, crearPropiedad);
   router.put('/:id', verificarToken, modificarPropiedad);
