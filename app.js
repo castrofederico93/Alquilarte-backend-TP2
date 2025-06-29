@@ -32,6 +32,8 @@ const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
 const clientesRoutes = require('./modules/cliente/clientes.routes');
 const propiedadesRoutes = require('./modules/propiedades/propiedades.routes');
+const pagosRoutes = require('./modules/pagos/pagos.routes');
+const Pago = require('./models/Pago'); // Asegurate de tener esto al principio
 
 app.use("/login", loginRoutes);
 app.use("/tareas", tareasRoutes);
@@ -39,6 +41,8 @@ app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/propiedades', propiedadesRoutes);
+app.use('/pagos', pagosRoutes); 
+
 
 // Vistas Pug protegidas
 app.get('/menu', verificarToken, (req, res) => {
@@ -71,6 +75,19 @@ app.get('/tareas/vista', verificarToken, async (req, res) => {
 app.get('/clientes/vista', verificarToken, (req, res) => {
   res.render('clientes', { usuario: req.usuario });
 });
+
+
+
+app.get('/pagos-vista', verificarToken, async (req, res) => {
+  try {
+    const pagos = await Pago.find();
+    res.render('pagos', { pagos, usuario: req.usuario });
+  } catch (error) {
+    console.error('Error al cargar la vista de pagos:', error);
+    res.status(500).send('Error al cargar la vista de pagos');
+  }
+});
+
 
 // Cierre de sesión global
 app.get('/logout', (req, res) => {

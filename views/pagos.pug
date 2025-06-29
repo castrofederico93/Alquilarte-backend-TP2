@@ -1,0 +1,66 @@
+doctype html
+html
+  head
+    title Pagos
+    meta(charset="utf-8")
+    link(rel='stylesheet', href='/css/styles.css')
+    link(rel='stylesheet', href='/css/pagos.css')
+    script(src='/js/pagos.js', defer)
+
+  body
+    h1 Lista de Pagos
+    a(href='/menu', class='btn-volver') ← Volver al Menú
+
+    form#busqueda
+      input(type='text', id='dniBuscar', placeholder='Buscar por DNI')
+      button(type='button', onclick='buscarPagos()') Buscar
+    button(type='button', onclick='toggleform(formularioPago)') Nuevo Pago
+
+    form#formularioPago.hidden
+        h2 Cargar nuevo pago
+        input(type='text', placeholder='Nombre', id='nombre')
+        input(type='text', placeholder='Apellido', id='apellido')
+        input(type='text', placeholder='DNI', id='dni')
+        input(type='email', placeholder='Email', id='email')
+        input(type='text', placeholder='Teléfono', id='telefono')
+        input(type='text', placeholder='Dirección propiedad', id='direccion')
+        input(type='number', placeholder='Monto', id='monto')
+        input(type='text', placeholder='Periodo', id='periodo')
+        input(type='text', placeholder='Adicionales', id='adicionales')
+        input(type='date', id='fechaPago')
+        input(type='text', placeholder='Forma de pago', id='formaPago')
+        button(type='button', onclick='guardarPago()') Guardar
+
+    div#resultados
+      if pagos && pagos.length
+        each pago in pagos
+          div.pago-card(data-id=pago._id onclick=`verDetallePago("${pago._id}")`)
+            h3 #{pago.cliente.nombre} #{pago.cliente.apellido}
+            p DNI: #{pago.cliente.dni}
+            p Propiedad: #{pago.propiedad.direccion}
+      else
+        p No hay pagos disponibles.
+
+    div#detallePago.hidden
+      h2 Detalle del Pago
+
+      p ID: 
+        span#detalleId
+      p Cliente: 
+        span#detalleCliente
+      p Propiedad: 
+        span#detallePropiedad
+      p Monto: 
+        span#detalleMonto
+      p Periodo: 
+        span#detallePeriodo
+      p Adicionales: 
+        span#detalleAdicionales
+      p Fecha de pago: 
+        span#detalleFecha
+      p Forma de pago: 
+        span#detalleForma
+
+      a#btnDescargar(target='_blank') Descargar Comprobante PDF
+      button(type='button', onclick='cerrarDetalle()') Cerrar
+
