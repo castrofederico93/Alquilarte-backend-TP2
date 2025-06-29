@@ -91,3 +91,7 @@ form input, form select {
 h2 {
   text-align: center !important; 
 }
+
+.opcion-placegolder{
+  color: gray!important;
+}
