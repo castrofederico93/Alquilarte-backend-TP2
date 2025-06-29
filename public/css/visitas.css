@@ -1,0 +1,200 @@
+/* public/css/visitas.css */
+
+/* Reset y variables de tema */
+:root {
+  --clr-bg: #f9f9f9;
+  --clr-card: #ffffff;
+  --clr-border: #ddd;
+  --clr-text: #333;
+  --clr-primary: #007bff;
+  --clr-success: #28a745;
+  --clr-warning: #ffc107;
+  --clr-danger: #dc3545;
+  --radius: 6px;
+  --spacing: 0.5rem;
+  --transition: 0.2s ease-in-out;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.4;
+  padding: 1rem;
+}
+
+/* ========================
+   FORMULARIO DE VISITAS
+   ======================== */
+#visitaForm {
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing);
+}
+
+#visitaForm .field {
+  display: flex;
+  flex-direction: column;
+}
+
+#visitaForm .field label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+#visitaForm .field input,
+#visitaForm .field select,
+#visitaForm .field textarea {
+  padding: 0.5rem;
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  transition: border-color var(--transition);
+}
+
+#visitaForm .field input:focus,
+#visitaForm .field select:focus,
+#visitaForm .field textarea:focus {
+  outline: none;
+  border-color: var(--clr-primary);
+}
+
+#visitaForm textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Botón guardar */
+#visitaForm button[type="submit"] {
+  grid-column: 1 / -1;
+  justify-self: end;
+  background: var(--clr-primary);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+#visitaForm button[type="submit"]:hover {
+  background: darken(var(--clr-primary), 10%);
+  transform: translateY(-2px);
+}
+
+/* Línea divisoria */
+hr {
+  border: none;
+  border-top: 1px solid var(--clr-border);
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+/* ========================
+   TABLA DE VISITAS
+   ======================== */
+#visitasTable {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  overflow-x: auto;
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#visitasTable thead {
+  background: var(--clr-primary);
+  color: #fff;
+}
+
+#visitasTable th,
+#visitasTable td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--clr-border);
+  font-size: 0.9rem;
+}
+
+#visitasTable tbody tr:hover {
+  background: rgba(0,0,0,0.03);
+}
+
+/* Columna de acciones */
+#visitasTable td.actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+/* ========================
+   BOTONES DE ACCIÓN
+   ======================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn--edit      { background: var(--clr-warning); color: #222; }
+.btn--delete    { background: var(--clr-danger);  color: #fff; }
+.btn--confirm   { background: var(--clr-success); color: #fff; }
+.btn--cancel    { background: var(--clr-secondary, #6c757d); color: #fff; }
+
+/* ========================
+   RESPONSIVE
+   ======================== */
+@media (max-width: 768px) {
+  #visitaForm {
+    grid-template-columns: 1fr;
+  }
+
+  #visitasTable th,
+  #visitasTable td {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #visitasTable td.actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #visitaForm {
+    padding: 1rem;
+  }
+
+  #visitaForm button[type="submit"] {
+    width: 100%;
+    justify-self: center;
+  }
+}

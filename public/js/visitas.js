@@ -4,6 +4,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.querySelector('#visitasTable tbody');
   const fields = ['cliente','propiedad','fecha','hora','estado','agente','observaciones'];
 
+  const propiedadSelect = document.getElementById('propiedad');
+  let cargadas = false;
+
+  // Al hacer click (o focus) cargamos sólo una vez
+  propiedadSelect.addEventListener('focus', async () => {
+    if (cargadas) return;
+    cargadas = true;
+
+    try {
+      const res = await fetch('/propiedades/estado/disponible', {
+        headers: { 'Authorization': localStorage.getItem('token') }
+      });
+      if (!res.ok) throw new Error('No se pudieron cargar las propiedades');
+      const props = await res.json();
+
+      // Limpio y relleno
+      propiedadSelect.innerHTML = '<option value="">-- Seleccione una propiedad --</option>';
+      props.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p._id;
+        opt.textContent = `${p.tipo} · ${p.direccion}`;
+        propiedadSelect.appendChild(opt);
+      });
+    } catch (err) {
+      console.error(err);
+      // Opcional: mostrar mensaje al usuario
+    }
+  });
+
+
+
   async function loadSelect(id, endpoint) {
     const sel = document.getElementById(id);
     const res = await fetch(`/${endpoint}`);
@@ -66,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+
 
   // Cargar selects y lista inicial
   ['clientes','propiedades','empleados'].forEach(ep => loadSelect(ep.slice(0,-1), ep));

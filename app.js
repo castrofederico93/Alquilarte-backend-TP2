@@ -32,6 +32,7 @@ const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
 const clientesRoutes = require('./modules/cliente/clientes.routes');
 const visitasRoutes = require('./modules/visitas/visitas.routes');
+const propiedadesRoutes = require('./modules/propiedad/propiedades.routes');
 
 
 
@@ -41,6 +42,7 @@ app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/visitas', visitasRoutes);
+app.use('/propiedades', propiedadesRoutes);
 
 
 
@@ -67,6 +69,10 @@ app.get('/clientes/vista', verificarToken, (req, res) => {
 
 app.get('/visitas/vista', verificarToken, (req, res) => {
   res.render('visitas', { usuario: req.usuario });
+});
+
+app.get('/propiedad/vista', verificarToken, (req, res) => {
+  res.render('propiedades', { usuario: req.usuario });
 });
 
 // Cierre de sesión global
