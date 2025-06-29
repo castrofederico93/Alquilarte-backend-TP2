@@ -1,16 +1,20 @@
+
 // Mostrar detalles del pago dentro de la tarjeta
 function verDetallePago(id) {
   fetch(`/pagos/${id}`)
     .then(res => res.json())
     .then(pago => {
+      // Eliminar cualquier detalle expandido anterior
+      document.querySelectorAll('.detalle-expandido').forEach(el => {
+        el.parentElement.classList.remove('expanded');
+        el.remove();
+      });
+
       const tarjeta = document.querySelector(`.pago-card[data-id="${id}"]`);
       if (!tarjeta) {
         console.error("No se encontró la tarjeta con ID:", id);
         return;
       }
-
-      // Eliminar cualquier detalle expandido anterior
-      document.querySelectorAll('.detalle-expandido').forEach(el => el.remove());
 
       const detalleDiv = document.createElement('div');
       detalleDiv.className = 'detalle-expandido';
@@ -23,10 +27,14 @@ function verDetallePago(id) {
         <p><strong>Adicionales:</strong> ${pago.adicionales || 'Ninguno'}</p>
         <p><strong>Fecha:</strong> ${new Date(pago.fechaPago).toLocaleDateString()}</p>
         <p><strong>Forma de pago:</strong> ${pago.formaPago}</p>
-        <a href="/pagos/pdf/${pago._id}" target="_blank" class="btn-pdf">Descargar PDF</a>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+          <button onclick="cerrarDetalle(event, '${id}')" class="btn-cerrar">Ocultar</button>
+          <a href="/pagos/pdf/${pago._id}" target="_blank" class="btn-pdf">Descargar PDF</a>
+        </div>
       `;
 
       tarjeta.appendChild(detalleDiv);
+      tarjeta.classList.add('expanded');
     })
     .catch(err => {
       console.error('Error al cargar detalle del pago:', err);
@@ -34,13 +42,44 @@ function verDetallePago(id) {
     });
 }
 
+
+// Cerrar el detalle del pago
+function cerrarDetalle(event, id) {
+  event.stopPropagation();
+
+  const tarjeta = document.querySelector(`.pago-card[data-id="${id}"]`);
+  if (!tarjeta) return;
+
+  const detalle = tarjeta.querySelector('.detalle-expandido');
+  if (detalle) detalle.remove();
+
+  tarjeta.classList.remove('expanded');
+}
+// Cancelar formulario de pago
+function cancelarFormulario() {
+  const form = document.getElementById('formularioPago');
+  if (!form) return;
+
+  form.style.display = 'none';
+
+  // Limpiar todos los inputs dentro del formulario
+  const inputs = form.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.value = '';
+    input.style.border = ''; // Quita bordes de validación si los había
+  });
+}
+
+
+
 // Buscar pagos por DNI (o todos)
 function buscarPagos() {
-  const dni = document.getElementById('dniBuscar').value.trim();
+  const dni = String(document.getElementById('dniBuscar').value.trim());
 
   fetch(`/pagos?dni=${dni}`)
     .then(res => res.json())
     .then(pagos => {
+      console.log('Pagos recibidos:', pagos);
       const resultados = document.getElementById('resultados');
       resultados.innerHTML = '';
 
@@ -71,23 +110,14 @@ function buscarPagos() {
 // Mostrar u ocultar el formulario de carga
 function toggleform() {
   const form = document.getElementById('formularioPago');
-  const btn = document.querySelector('button[onclick="toggleform(formularioPago)"]');
-  
-  if (!form || !btn) return;
-
-  form.classList.toggle('hidden');
-
-  if (form.classList.contains('hidden')) {
-    btn.textContent = 'Nuevo Pago';
-  } else {
-    btn.textContent = 'Cancelar';
-  }
+  if (!form) return;
+  const isHidden = form.style.display === '' || form.style.display === 'none';
+  form.style.display = isHidden ? 'flex' : 'none';
 }
-
-
 
 // Enviar nuevo pago
 function guardarPago() {
+  const campos = ['nombre', 'apellido', 'dni', 'email', 'telefono', 'direccion', 'monto', 'periodo', 'adicionales', 'fechaPago', 'formaPago'];
   const nuevoPago = {
     cliente: {
       nombre: document.getElementById('nombre').value,
@@ -107,8 +137,19 @@ function guardarPago() {
   };
 
   // Validación básica
-  if (!nuevoPago.cliente.dni || !nuevoPago.monto || !nuevoPago.periodo) {
-    alert('DNI, Monto y Periodo son obligatorios.');
+  let valido = true;
+  ['dni', 'monto', 'periodo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el.value.trim() === '') {
+      el.style.border = '2px solid red';
+      valido = false;
+    } else {
+      el.style.border = '';
+    }
+  });
+
+  if (!valido) {
+    alert('Por favor completá los campos obligatorios (DNI, Monto y Periodo).');
     return;
   }
 

@@ -9,28 +9,37 @@ html
 
   body
     h1 Lista de Pagos
-    a(href='/menu', class='btn-volver') ← Volver al Menú
 
-    form#busqueda
-      input(type='text', id='dniBuscar', placeholder='Buscar por DNI')
-      button(type='button', onclick='buscarPagos()') Buscar
-    button(type='button', onclick='toggleform()') Nuevo Pago
+    // Contenedor centrado para botones y búsqueda
+    .center-container
+      a.btn-volver(href='/menu') ← Volver al Menú
 
-    form#formularioPago(class='hidden')
-        h2 Cargar nuevo pago
-        input(type='text', placeholder='Nombre', id='nombre')
-        input(type='text', placeholder='Apellido', id='apellido')
-        input(type='text', placeholder='DNI', id='dni')
-        input(type='email', placeholder='Email', id='email')
-        input(type='text', placeholder='Teléfono', id='telefono')
-        input(type='text', placeholder='Dirección propiedad', id='direccion')
-        input(type='number', placeholder='Monto', id='monto')
-        input(type='text', placeholder='Periodo', id='periodo')
-        input(type='text', placeholder='Adicionales', id='adicionales')
-        input(type='date', id='fechaPago')
-        input(type='text', placeholder='Forma de pago', id='formaPago')
-        button(type='button', onclick='guardarPago()') Guardar
+      form#busqueda
+        input(type='text', id='dniBuscar', placeholder='Buscar por DNI')
+        button(type='button', onclick='buscarPagos()') Buscar
 
+      button.btn-pago(type='button', onclick='toggleform()') Nuevo Pago
+
+    // Formulario en una columna
+    form#formularioPago.hide
+      h2 Cargar nuevo pago
+      input(type='text', placeholder='Nombre', id='nombre')
+      input(type='text', placeholder='Apellido', id='apellido')
+      input(type='text', placeholder='DNI', id='dni')
+      input(type='email', placeholder='Email', id='email')
+      input(type='text', placeholder='Teléfono', id='telefono')
+      input(type='text', placeholder='Dirección propiedad', id='direccion')
+      input(type='number', placeholder='Monto', id='monto')
+      input(type='text', placeholder='Periodo', id='periodo')
+      input(type='text', placeholder='Adicionales', id='adicionales')
+      input(type='date', id='fechaPago')
+      input(type='text', placeholder='Forma de pago', id='formaPago')
+      button(type='button', onclick='guardarPago()') Guardar
+      button(type='button', onclick='cancelarFormulario()') Cancelar
+
+
+
+    // Resultados
     div#resultados
       if pagos && pagos.length
         each pago in pagos
@@ -40,5 +49,3 @@ html
             p Propiedad: #{pago.propiedad.direccion}
       else
         p No hay pagos disponibles.
-
- 

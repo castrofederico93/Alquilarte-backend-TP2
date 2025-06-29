@@ -1,4 +1,3 @@
-// modules/pagos/pagos.controller.js
 const Pago = require('../../models/Pago');
 const PDFDocument = require('pdfkit');
 const path = require('path');
