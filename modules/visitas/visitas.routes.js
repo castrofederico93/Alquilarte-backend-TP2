@@ -1,31 +1,39 @@
 // modules/visitas/visitas.routes.js
 const express = require('express');
-const router = express.Router();
-const ctrl = require('./visitas.controller');
+const router  = express.Router();
+
+const {
+  mostrarVisitasJSON,
+  mostrarAgendaVisitas,
+  crearVisita,
+  editarVisita,
+  eliminarVisita
+} = require('./visitas.controller');
+
 const verificarToken = require('../../middlewares/auth');
 
 
-// Vista con Pug protegida por JWT
-router.get('/vista', verificarToken, async (req, res) => {
-  try {
-    const visitas = await ctrl.listVisitas();
-    res.render('visitas', { visitas, usuario: req.usuario });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al cargar la vista');
-  }
-});
 
-// GET /visitas - Listar
-router.get('/', verificarToken,ctrl.listVisitas);
-// GET /visitas/:id - Obtener uno
-router.get('/:id',verificarToken,ctrl.getVisita);
-// POST /visitas - Crear
-router.post('/', verificarToken,ctrl.createVisita);
-// PUT /visitas/:id - Actualizar
-router.put('/:id', verificarToken,ctrl.updateVisita);
-// DELETE /visitas/:id - Eliminar
-router.delete('/:id', verificarToken, ctrl.deleteVisita);
+
+
+// GET /visitas
+router.get('/', verificarToken, mostrarVisitasJSON);
+
+// GET /visitas/vista
+// Ruta que devuelve la vista Pug - esta es para el navegador
+router.get('/vista', verificarToken, mostrarAgendaVisitas);
+
+// GET /visitas/:id
+//router.get('/:id', verificarToken, obtenerVisitaJSON);
+
+// POST /visitas
+router.post('/', verificarToken, crearVisita);
+
+// PUT /visitas/:id
+router.put('/:id', verificarToken, editarVisita);
+
+// DELETE /visitas/:id
+router.delete('/:id', verificarToken, eliminarVisita);
 
 module.exports = router;
 

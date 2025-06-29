@@ -32,6 +32,17 @@ const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
 const clientesRoutes = require('./modules/cliente/clientes.routes');
 const propiedadesRoutes = require('./modules/propiedades/propiedades.routes');
+const { mostrarAgendaVisitas } = require('./modules/visitas/visitas.controller');
+
+
+app.get(
+  '/visitas/vista',
+  verificarToken,
+  mostrarAgendaVisitas
+);
+
+const visitasRoutes = require('./modules/visitas/visitas.routes');
+
 
 app.use("/login", loginRoutes);
 app.use("/tareas", tareasRoutes);
@@ -39,6 +50,8 @@ app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/propiedades', propiedadesRoutes);
+app.use('/visitas', visitasRoutes);
+
 
 
 
@@ -74,9 +87,7 @@ app.get('/clientes/vista', verificarToken, (req, res) => {
   res.render('clientes', { usuario: req.usuario });
 });
 
-app.get('/visitas/vista', verificarToken, (req, res) => {
-  res.render('visitas', { usuario: req.usuario });
-});
+
 
 app.get('/propiedad/vista', verificarToken, (req, res) => {
   res.render('propiedades', { usuario: req.usuario });
