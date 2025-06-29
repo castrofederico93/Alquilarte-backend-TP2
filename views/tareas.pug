@@ -3,11 +3,10 @@ html
   head
     title Lista de Tareas
     link(rel='stylesheet', href='/css/tareas.css')
-    link(rel='stylesheet', href='/css/styles.css')
-
   body
-
-    h1(style="text-align:center") Lista de Tareas
+    h1 Lista de Tareas
+    div#mensaje.alerta-mensaje.oculto
+    a.boton-volver(href="/menu") Volver menu
 
     // Filtros
     div.filtro-container
@@ -55,69 +54,77 @@ html
       button.boton-limpiar(type="button", onclick="limpiarFiltros()") Limpiar Filtros
 
     if tareas.length
-      table
-        thead
-          tr
-            th ID
-            th Título
-            th Descripción
-            th Estado
-            th Prioridad
-            th Área
-            th Asignado a
-            th Fecha
-            th Acciones
-        tbody
-          each tarea, index in tareas
-            - const fechaObj = new Date(tarea.fecha)
-            - const fechaLocal = new Date(fechaObj.getTime() + fechaObj.getTimezoneOffset() * 60000) // corrige offset
-            - const fechaFormateada = fechaLocal.toLocaleDateString('es-AR')
-            tr.fila-tarea(data-estado=tarea.estado, data-prioridad=tarea.prioridad, data-area=tarea.area)
-              td #{(index + 1)}
-              td #{tarea.titulo}
-              td #{tarea.descripcion}
-              td #{tarea.estado}
-              td #{tarea.prioridad}
-              td #{tarea.area}
-              td #{tarea.asignadoA ? tarea.asignadoA.nombre + ' ' + tarea.asignadoA.apellido : 'Sin asignar'}
-              td #{fechaFormateada}
-              td
-                button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
-                button.eliminar(type="button", onclick=`eliminarTarea('${tarea._id}')`) Eliminar
+      div.tabla-scrollable
+        table
+          thead
+            tr
+              th ID
+              th Título
+              th Descripción
+              th Estado
+              th Prioridad
+              th Área
+              th Asignado a
+              th Fecha
+              th Acciones
+          tbody
+            each tarea, index in tareas
+              - const fechaObj = new Date(tarea.fecha)
+              - const fechaLocal = new Date(fechaObj.getTime() + fechaObj.getTimezoneOffset() * 60000)
+              - const fechaFormateada = fechaLocal.toLocaleDateString('es-AR')
+              tr.fila-tarea(class=tarea.estado data-estado=tarea.estado data-prioridad=tarea.prioridad data-area=tarea.area)
+                td #{index + 1}
+                td #{tarea.titulo}
+                td #{tarea.descripcion}
+                td #{tarea.estado}
+                // Aplica clase dinámica para el color según prioridad
+                td(class=`prioridad-${tarea.prioridad}`) #{tarea.prioridad}
+                td #{tarea.area}
+                td #{tarea.asignadoA ? tarea.asignadoA.nombre + ' ' + tarea.asignadoA.apellido : 'Sin asignar'}
+                td #{fechaFormateada}
+                td
+                  button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
+                  button.eliminar(type="button", onclick=`eliminarTarea('${tarea._id}')`) Eliminar
+
+            // Fila oculta por defecto, visible si no hay coincidencias
+            tr#sin-tareas(style="display: none; text-align: center;")
+              td(colspan="9") No hay tareas que coincidan con los filtros aplicados.
     else
       p No hay tareas para mostrar.
 
-    div#mensaje
+    h2 Crear / Editar Tarea
 
-    hr
-    h2(style="text-align:center") Crear / Editar Tarea
-
-    form#formTarea
+    form.formulario-tarea#formTarea
       input(type="hidden", name="id")
-      input(type="text", name="titulo", placeholder="Título", required)
-      input(type="text", name="descripcion", placeholder="Descripción", required)
-      select(name="estado")
-        option(value="pendiente") Pendiente
-        option(value="en proceso") En proceso
-        option(value="finalizada") Finalizada
-      select(name="prioridad")
-        option(value="alta") Alta
-        option(value="media") Media
-        option(value="baja") Baja
-      select(name="area", required)
-        option(disabled selected value="") -- Seleccionar Área --
-        option(value="Contabilidad") Contabilidad
-        option(value="Administración") Administración
-        option(value="Mantenimiento") Mantenimiento
-        option(value="Ventas") Ventas
 
-      select(name="asignadoA")
-        option(value="") -- Sin asignar --
-        each empleado in empleados
-          option(value=empleado._id)= `${empleado.nombre} ${empleado.apellido}`
+      .form-row
+        input(type="text", name="titulo", placeholder="Título", required)
+        select(name="estado")
+          option(value="pendiente") Pendiente
+          option(value="en proceso") En proceso
+          option(value="finalizada") Finalizada
+        select(name="prioridad")
+          option(value="alta") Alta
+          option(value="media") Media
+          option(value="baja") Baja
 
-      input(type="date", name="fecha", required)
-      button(type="submit") Guardar Tarea
-      button.boton-cancelar(type="button", onclick="limpiarFormulario()") Cancelar
+      .form-row
+        select(name="area", required)
+          option(disabled selected value="") -- Seleccionar Área --
+          option(value="Contabilidad") Contabilidad
+          option(value="Administración") Administración
+          option(value="Mantenimiento") Mantenimiento
+          option(value="Ventas") Ventas
+        select(name="asignadoA")
+          option(value="") -- Sin asignar --
+          each empleado in empleados
+            option(value=empleado._id)= `${empleado.nombre} ${empleado.apellido}`
+        input(type="date", name="fecha", required)
+
+      textarea(name="descripcion", placeholder="Descripción", required)
+
+      .form-row.botones
+        button.boton-guardar(type="submit") Guardar
+        button.boton-cancelar(type="button", onclick="limpiarFormulario()") Cancelar
 
     script(src='/js/tareas.js')

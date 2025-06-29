@@ -3,11 +3,13 @@ const router = express.Router();
 const {
   obtenerClientes,
   crearCliente,
-  eliminarCliente
+  eliminarCliente,
+  modificarCliente
 } = require('./clientes.controller');
 
 router.get('/', obtenerClientes);
 router.post('/', crearCliente);
 router.delete('/:id', eliminarCliente);
+router.put('/:id', modificarCliente);
 
 module.exports = router;
