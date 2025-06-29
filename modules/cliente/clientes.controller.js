@@ -29,9 +29,28 @@ async function eliminarCliente(req, res, next) {
     next(err);
   }
 }
+const modificarCliente = async (req, res) => {
+  try {
+    const clienteActualizado = await Cliente.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!clienteActualizado) {
+      return res.status(404).json({ error: 'Cliente no encontrado' });
+    }
+
+    res.json(clienteActualizado);
+  } catch (error) {
+    console.error('Error al modificar cliente:', error);
+    res.status(500).json({ error: 'Error al modificar cliente' });
+  }
+};
 
 module.exports = {
   obtenerClientes,
   crearCliente,
-  eliminarCliente
+  eliminarCliente,
+  modificarCliente
 };

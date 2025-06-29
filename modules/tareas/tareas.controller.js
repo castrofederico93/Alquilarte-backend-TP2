@@ -11,6 +11,7 @@ async function getAllTareas(req, res) {
     const tareas = await Tarea.find(filtros).populate('asignadoA');
     res.json(tareas);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ mensaje: 'Error al obtener las tareas' });
   }
 }
@@ -24,52 +25,72 @@ async function getTareaById(req, res) {
       res.status(404).json({ mensaje: 'Tarea no encontrada' });
     }
   } catch (error) {
+    console.error(error);
     res.status(400).json({ mensaje: 'ID inválido' });
   }
 }
 
 async function createTarea(req, res) {
   try {
-    const datosTarea = { ...req.body };
+    const { titulo, descripcion, area, estado, prioridad, fecha, asignadoA } = req.body;
 
-    if (datosTarea.asignadoA) {
-      const empleado = await Empleado.findById(datosTarea.asignadoA);
+    if (!titulo || !descripcion || !area || !estado || !prioridad || !fecha) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
+    }
+
+    if (isNaN(Date.parse(fecha))) {
+      return res.status(400).json({ mensaje: 'Fecha inválida' });
+    }
+
+    if (asignadoA) {
+      const empleado = await Empleado.findById(asignadoA);
       if (!empleado) {
         return res.status(400).json({ mensaje: 'Empleado asignado no válido' });
       }
-    } else {
-      datosTarea.asignadoA = null;
     }
 
-    const nuevaTarea = new Tarea(datosTarea);
+    const nuevaTarea = new Tarea({ titulo, descripcion, area, estado, prioridad, fecha, asignadoA: asignadoA || null });
     await nuevaTarea.save();
     res.status(201).json(nuevaTarea);
   } catch (error) {
-    res.status(400).json({ mensaje: 'Error al crear tarea', error });
+    console.error(error);
+    res.status(400).json({ mensaje: 'Error al crear tarea', error: error.message });
   }
 }
 
 async function updateTarea(req, res) {
   try {
-    const datosTarea = { ...req.body };
+    const { titulo, descripcion, area, estado, prioridad, fecha, asignadoA } = req.body;
 
-    if (datosTarea.asignadoA) {
-      const empleado = await Empleado.findById(datosTarea.asignadoA);
+    if (!titulo || !descripcion || !area || !estado || !prioridad || !fecha) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
+    }
+
+    if (isNaN(Date.parse(fecha))) {
+      return res.status(400).json({ mensaje: 'Fecha inválida' });
+    }
+
+    if (asignadoA) {
+      const empleado = await Empleado.findById(asignadoA);
       if (!empleado) {
         return res.status(400).json({ mensaje: 'Empleado asignado no válido' });
       }
-    } else {
-      datosTarea.asignadoA = null;
     }
 
-    const tarea = await Tarea.findByIdAndUpdate(req.params.id, datosTarea, { new: true }).populate('asignadoA');
-    if (tarea) {
-      res.json(tarea);
-    } else {
-      res.status(404).json({ mensaje: 'Tarea no encontrada' });
+    const tareaActualizada = await Tarea.findByIdAndUpdate(
+      req.params.id,
+      { titulo, descripcion, area, estado, prioridad, fecha, asignadoA: asignadoA || null },
+      { new: true }
+    ).populate('asignadoA');
+
+    if (!tareaActualizada) {
+      return res.status(404).json({ mensaje: 'Tarea no encontrada' });
     }
+
+    res.json(tareaActualizada);
   } catch (error) {
-    res.status(400).json({ mensaje: 'Error al actualizar tarea', error });
+    console.error(error);
+    res.status(400).json({ mensaje: 'Error al actualizar tarea', error: error.message });
   }
 }
 
@@ -82,7 +103,8 @@ async function deleteTarea(req, res) {
       res.status(404).json({ mensaje: 'Tarea no encontrada' });
     }
   } catch (error) {
-    res.status(400).json({ mensaje: 'Error al eliminar tarea', error });
+    console.error(error);
+    res.status(400).json({ mensaje: 'Error al eliminar tarea', error: error.message });
   }
 }
 
@@ -96,5 +118,5 @@ module.exports = {
   createTarea,
   updateTarea,
   deleteTarea,
-  obtenerTareas
+  obtenerTareas,
 };

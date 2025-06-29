@@ -3,33 +3,39 @@ html
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title Clientes
+    title Gestión de Clientes
     link(rel='stylesheet', href='/css/clientes.css')
-
   body
     .contenedor
       .formulario-container
-        h1 Nuevo Cliente
+        h1 Nuevo Cliente/editar
         form#clienteForm
-          label Nombre:
-          input(type='text', name='nombre', required)
-          label Apellido:
-          input(type='text', name='apellido', required)
-          label DNI:
-          input(type='text', name='dni', required)
-          label Email:
-          input(type='email', name='email', required)
-          label Teléfono:
-          input(type='text', name='telefono')
+          label(for='nombre') Nombre:
+          input(type='text', name='nombre', required, maxlength='30')
+          
+          label(for='apellido') Apellido:
+          input(type='text', name='apellido', required, maxlength='30')
+          
+          label(for='dni') DNI:
+          input(type='text', name='dni', required, maxlength='11')
+          
+          label(for='email') Email:
+          input(type='email', name='email', required, maxlength='30')
+          
+          label(for='telefono') Teléfono:
+          input(type='text', name='telefono', maxlength='15')
+
           .botones
+            a.btn-volver(href='/menu') Volver menu
             button(type='submit') Agregar
             button(type='button', id='limpiarBtn') Limpiar
 
       .lista-container
         h2 Clientes registrados
+
         .div-busqueda
           img(src='/img/buscar.gif', alt='Buscar', class='icono-buscar')
-          input#buscarInput(type='text', placeholder='Buscar por nombre o DNI...')
+          input#buscarInput(type='text', placeholder='Buscar por nombre o DNI...', maxlength='11')
 
         ul#listaClientes
 
