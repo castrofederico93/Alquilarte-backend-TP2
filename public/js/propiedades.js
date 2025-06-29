@@ -43,11 +43,19 @@ async function guardarPropiedad() {
         if (!respuesta.ok){throw new Error('Error al guardar la propiedad')};
 
 
-      alert('Operacion exitosa');
+/*       alert('Operacion exitosa'); */
+
+      Swal.fire({
+        title: "Operacion exitosa",
+        text: "Click en el boton para continuar",
+        icon: "success"
+      }).then(function() {
+        location.reload();
+      });
 
       limpiarFormulario();
 
-      location.reload();
+      
         
 
 
@@ -100,6 +108,8 @@ async function eliminarPropiedad(id){
 
 
 }
+
+
 
 
 
