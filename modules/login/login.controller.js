@@ -51,7 +51,7 @@ async function login(req, res, next) {
       // Para el navegador: guardar cookie y redirigir
       res.cookie('token', token, {
         httpOnly: true,
-        secure: false, // Cambiar a true si usás HTTPS
+        secure: false,
         maxAge: 60 * 60 * 1000 // 1 hora
       });
       return res.redirect('/menu');
