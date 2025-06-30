@@ -20,7 +20,7 @@ async function obtenerPropiedadVista(req, res) {
     res.render('propiedades', { propiedades });
   } catch (error) {
     res.status(400).send('Error al cargar propiedades');
-  }
+  }/*  */
 }
 
 

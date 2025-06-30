@@ -79,6 +79,14 @@ function limpiarFormulario() {
 
 }
 
+function formatearFecha(fechaISO) {
+  const fecha = new Date(fechaISO);
+  const dia = String(fecha.getDate()).padStart(2, '0');
+  const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+  const anio = fecha.getFullYear();
+  return `${dia}-${mes}-${anio}`;
+}
+
 async function eliminarPropiedad(id){
 
   if(!confirm(`Estas seguro que quieres eliminar la propiedad con id (${id})?`)) {

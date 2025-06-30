@@ -1,0 +1,93 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+h1, h2 {
+  color: #2c3e50;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin: 2px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.boton-cancelar {
+  background-color: #e57373;
+  color: white;
+}
+
+.menu {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.submenu {
+  display: none;
+  flex-direction: column;
+  margin: 10px auto;
+  width: fit-content;
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+#mensaje {
+  display: none;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.exito {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Hover para los links dentro de submenu */
+.submenu a {
+  text-decoration: none;
+  color: #2c3e50;
+  padding: 5px;
+  border-radius: 3px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.submenu a:hover {
+  background-color: #2c3e50;
+  color: #fff;
+}
+
+
+/*estilos para el formulario*/
+
+form{
+  margin: 0 auto !important; 
+}
+
+form input, form select {
+  width: 95% !important;
+  max-width: 600px;
+}
+
+h2 {
+  text-align: center !important; 
+}
