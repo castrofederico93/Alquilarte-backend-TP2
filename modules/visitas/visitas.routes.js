@@ -12,10 +12,6 @@ const {
 
 const verificarToken = require('../../middlewares/auth');
 
-
-
-
-
 // GET /visitas
 router.get('/', verificarToken, mostrarVisitasJSON);
 

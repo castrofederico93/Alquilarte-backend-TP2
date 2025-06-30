@@ -5,13 +5,12 @@ const Propiedad = require('../../models/Propiedades');
 const Empleado  = require('../../models/Empleado');
 const Cliente   = require('../../models/Cliente');
 const mongoose = require('mongoose');
-
+const { DateTime } = require('luxon');
 
 function formatearFecha(fechaISO) {
-  const fecha = new Date(fechaISO);
-  const dia = String(fecha.getDate()).padStart(2, '0');
-  const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-  const anio = fecha.getFullYear();
+  if (!fechaISO) return '';
+  const isoString = typeof fechaISO === 'string' ? fechaISO : fechaISO.toISOString();
+  const [anio, mes, dia] = isoString.slice(0, 10).split('-');
   return `${dia}-${mes}-${anio}`;
 }
 
