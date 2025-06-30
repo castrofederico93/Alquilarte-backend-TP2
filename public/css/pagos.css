@@ -1,0 +1,181 @@
+
+/* === ESTILOS BASE === */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: linear-gradient(135deg, #4a90e2, #1456a0);
+}
+
+/* TITULOS */
+h1, h2 {
+  text-align: center;
+  color: #ffffff;
+}
+
+#formularioPago h2 {
+  color: #000000;
+}
+
+/* === BOTONES GENERALES === */
+button, .btn-pago, .btn-volver, .btn-pdf {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-pago {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-pago:hover {
+  background-color: #218838;
+}
+
+.btn-volver {
+  background-color: white;
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+.btn-volver:hover {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-pdf {
+  display: inline-block;
+  margin-top: 15px;
+  background-color: #2196F3;
+  color: white;
+  text-decoration: none;
+}
+
+/* === CONTENEDORES CENTRADOS === */
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === BÚSQUEDA === */
+#busqueda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+#busqueda input {
+  padding: 8px;
+  width: 200px;
+}
+
+/* === FORMULARIO NUEVO PAGO === */
+#formularioPago {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #e9f3ff;
+  padding: 20px;
+  border: 1px solid #b3d4fc;
+  border-radius: 8px;
+  margin-top: 20px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#formularioPago input,
+#formularioPago button {
+  width: 95%;
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+@media (min-width: 601px) {
+  #formularioPago input {
+    flex: 1 1 calc(50% - 10px);
+  }
+}
+
+#formularioPago button {
+  flex: 1 1 100%;
+}
+
+/* === TARJETAS DE PAGO === */
+.pago-card {
+  border: 1px solid #aacbe6;
+  border-left: 6px solid #4a90e2;
+  border-radius: 6px;
+  padding: 15px;
+  margin: 12px auto;
+  max-width: 400px;
+  background-color: #fdfefe;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.pago-card:hover {
+  background-color: #eef6ff;
+  transform: scale(1.01);
+}
+
+.detalle-expandido {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  margin-top: 10px;
+  padding-top: 0;
+  font-size: 0.95em;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.pago-card.expanded .detalle-expandido {
+  max-height: 500px;
+  padding-top: 10px;
+}
+
+/* === DETALLE GENERAL === */
+#detallePago {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 500px;
+  background-color: #f3f3f3;
+}
+
+#detallePago p {
+  margin: 8px 0;
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+
+.btn-cerrar {
+  background-color: #e57373;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-cerrar:hover {
+  background-color: #c62828;
+}

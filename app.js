@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
 
+
 // Middleware propio
 app.use(requestLogger);
 
@@ -33,7 +34,8 @@ const loginRoutes = require('./modules/login/login.routes');
 const clientesRoutes = require('./modules/cliente/clientes.routes');
 const propiedadesRoutes = require('./modules/propiedades/propiedades.routes');
 const { mostrarAgendaVisitas } = require('./modules/visitas/visitas.controller');
-
+const pagosRoutes = require('./modules/pagos/pagos.routes');
+const Pago = require('./models/Pago'); 
 
 app.get(
   '/visitas/vista',
@@ -51,7 +53,7 @@ app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/propiedades', propiedadesRoutes);
 app.use('/visitas', visitasRoutes);
-
+app.use('/pagos', pagosRoutes); 
 
 
 
@@ -87,6 +89,15 @@ app.get('/clientes/vista', verificarToken, (req, res) => {
   res.render('clientes', { usuario: req.usuario });
 });
 
+app.get('/pagos-vista', verificarToken, async (req, res) => {
+  try {
+    const pagos = await Pago.find();
+    res.render('pagos', { pagos, usuario: req.usuario });
+  } catch (error) {
+    console.error('Error al cargar la vista de pagos:', error);
+    res.status(500).send('Error al cargar la vista de pagos');
+  }
+});
 
 
 app.get('/propiedad/vista', verificarToken, (req, res) => {
