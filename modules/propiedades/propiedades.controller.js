@@ -3,17 +3,24 @@ const Propiedad = require('../../models/Propiedades');
 const mongoose = require('mongoose')
 
 //metodo get 
-async function obtenerPropiedad(req,res) {
+// Para devolver JSON (API)
+async function obtenerPropiedadJSON(req, res) {
+  try {
+    const propiedades = await Propiedad.find();
+    res.status(200).json(propiedades);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
 
-    try{
-        const propiedades = await Propiedad.find();
-        res.status(200).json(propiedades);
-
-    }catch (error){
-        res.status(400).json({error: error.message});
-    }
-
-
+// Para devolver la vista Pug 
+async function obtenerPropiedadVista(req, res) {
+  try {
+    const propiedades = await Propiedad.find();
+    res.render('propiedades', { propiedades });
+  } catch (error) {
+    res.status(400).send('Error al cargar propiedades');
+  }/*  */
 }
 
 
@@ -25,7 +32,7 @@ async function crearPropiedad(req,res) {
     const nuevaPropiedad = new Propiedad(datos)
 
     await nuevaPropiedad.save();
-    res.status(201).json(nuevaPropiedad);
+    res.redirect('/propiedades/vista');
 
     }catch (error) {
 
@@ -81,9 +88,9 @@ async function eliminarPropiedad(req,res){
 
 
 module.exports = {
-
-    obtenerPropiedad,
-    crearPropiedad,
-    modificarPropiedad,
-    eliminarPropiedad,
-}
+  obtenerPropiedadJSON,
+  obtenerPropiedadVista,
+  crearPropiedad,
+  modificarPropiedad,
+  eliminarPropiedad,
+};

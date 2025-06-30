@@ -1,0 +1,103 @@
+doctype html
+html
+  head
+    title Lista de Propiedades
+    link(rel="stylesheet", href="/css/styles.css")
+    link(rel="stylesheet", href="/css/propiedades.css")
+   
+  body 
+    //– Tabla de visitas
+    h1 Agenda de Visitas
+    table#visitasTable
+    if visitas.length
+      table(border='1' cellpading='5' cellspacing='0')
+        thead
+          tr
+            th Cliente
+            th Propiedad
+            th Fecha
+            th Hora
+            th Estado
+            th Agente
+            th Observaciones
+            th Acciones
+        tbody
+          each visita in visitas
+            tr 
+              td #{visita.cliente ? visita.cliente.nombre + ' ' + visita.cliente.apellido : ''}
+              td #{visita.propiedad.direccion}
+              td= formatearFecha(visita.fecha)
+              td #{visita.hora}
+              td #{visita.estado}
+              td #{visita.agente ? visita.agente.nombre + ' ' + visita.agente.apellido : ''}
+              td #{visita.observaciones}
+              td
+                button(
+                  type="button",
+                  onclick="editarVisita(this)",
+                  data-id=visita._id,
+                  data-cliente=visita.cliente ? visita.cliente._id : '',
+                  data-propiedad=visita.propiedad ? visita.propiedad._id : '',
+                  data-fecha=visita.fecha,
+                  data-hora=visita.hora,
+                  data-estado=visita.estado,
+                  data-agente=visita.agente ? visita.agente._id : '',
+                  data-observaciones=visita.observaciones
+                ) Editar
+                button(type="button", onclick="eliminarVisita(this.dataset.id)", data-id=visita._id) Eliminar
+    else
+      p No hay visitas para mostrar.           
+
+h2 Agregar/editar visita
+
+//– Formulario de creación/edición
+form#visitaForm(method="POST", action="/visitas", onsubmit="event.preventDefault(); guardarVisita()")
+  input(type='hidden', name='id' id='visitaId')
+  input(type="hidden", name="method", id="methodField", value="POST") 
+  p(style="font-size: 12px; color: gray") (*) Campo obligatorio
+
+  //Campos del formulario//
+
+  label(for='cliente') Cliente: *
+  select(name="cliente", id='cliente', required)
+    option(value='') -- Seleccione un cliente --
+    each cliente in clientes
+      option(value=cliente._id)= cliente.nombre + ' ' + cliente.apellido
+
+    
+  label(for='propiedad') Propiedad: *
+  select(name="propiedad", id='propiedad', required)
+    option(value='') -- Seleccione una propiedad --
+    each propiedad in propiedadesDisponibles
+      option(value=propiedad._id)= propiedad.tipo + ' · ' + propiedad.direccion
+
+    
+  label(for='fecha') Fecha:
+  input(type='date', id='fecha', required)
+
+  label(for='hora') Hora:
+  input(type='time', id='hora', required)
+      
+  label(for='estado') Estado:
+  select(id='estado')
+    option(value='pendiente') pendiente
+    option(value='realizada') realizada
+    option(value='cancelada') cancelada
+  
+  label(for='agente') Agente:
+  select(id='agente')
+    option(value='') -- ninguno --
+    each empleado in empleadosRRHH
+      option(value=empleado._id)= empleado.nombre + ' ' + empleado.apellido
+
+      
+  label(for='observaciones') Observaciones:
+  input(type="textarea",id='observaciones',placeholder='Ingrese observaciones sobre la visita')
+
+
+  //– Botones del formulario
+  
+  button(type='submit', id='guardarVisita()') Guardar
+  button(type="button", onclick="limpiarFormulario()") Limpiar
+
+  script(src='/js/visitas.js')

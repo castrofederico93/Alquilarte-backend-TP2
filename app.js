@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
 
+
 // Middleware propio
 app.use(requestLogger);
 
@@ -32,8 +33,18 @@ const filtrosRoutes = require("./modules/filtros/filtros.routes");
 const loginRoutes = require('./modules/login/login.routes'); 
 const clientesRoutes = require('./modules/cliente/clientes.routes');
 const propiedadesRoutes = require('./modules/propiedades/propiedades.routes');
+const { mostrarAgendaVisitas } = require('./modules/visitas/visitas.controller');
 const pagosRoutes = require('./modules/pagos/pagos.routes');
-const Pago = require('./models/Pago'); // Asegurate de tener esto al principio
+const Pago = require('./models/Pago'); 
+
+app.get(
+  '/visitas/vista',
+  verificarToken,
+  mostrarAgendaVisitas
+);
+
+const visitasRoutes = require('./modules/visitas/visitas.routes');
+
 
 app.use("/login", loginRoutes);
 app.use("/tareas", tareasRoutes);
@@ -41,7 +52,9 @@ app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/propiedades', propiedadesRoutes);
+app.use('/visitas', visitasRoutes);
 app.use('/pagos', pagosRoutes); 
+
 
 
 // Vistas Pug protegidas
@@ -76,8 +89,6 @@ app.get('/clientes/vista', verificarToken, (req, res) => {
   res.render('clientes', { usuario: req.usuario });
 });
 
-
-
 app.get('/pagos-vista', verificarToken, async (req, res) => {
   try {
     const pagos = await Pago.find();
@@ -88,6 +99,10 @@ app.get('/pagos-vista', verificarToken, async (req, res) => {
   }
 });
 
+
+app.get('/propiedad/vista', verificarToken, (req, res) => {
+  res.render('propiedades', { usuario: req.usuario });
+});
 
 // Cierre de sesión global
 app.get('/logout', (req, res) => {

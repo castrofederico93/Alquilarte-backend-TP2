@@ -1,99 +1,35 @@
+/* General */
 body {
   font-family: sans-serif;
-  margin: 20px;
-}
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  }
 
 h1, h2 {
-  color: #2c3e50;
+  color: #0a57a5;
+  text-align: center;
+  margin: 0.5rem 0;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-}
-
-th, td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-tr.pendiente {
-  background-color: #fff9c4;
-}
-
-tr.en-proceso {
-  background-color: #bbdefb;
-}
-
-tr.finalizada {
-  background-color: #c8e6c9;
-}
-
-button {
-  margin: 2px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.boton-cancelar {
-  background-color: #e57373;
-  color: white;
-}
-
-.menu {
+main {
+  flex: 1;
   display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.submenu {
-  display: none;
   flex-direction: column;
-  margin: 10px auto;
-  width: fit-content;
-  padding: 10px;
-  background-color: #eee;
-  border-radius: 5px;
+  overflow: hidden;
+  padding: 1rem;
 }
 
-#mensaje {
-  display: none;
-  padding: 10px;
-  margin-bottom: 20px;
-}
-
-.exito {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-/* Hover para los links dentro de submenu */
-.submenu a {
-  text-decoration: none;
-  color: #2c3e50;
-  padding: 5px;
-  border-radius: 3px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.submenu a:hover {
-  background-color: #2c3e50;
-  color: #fff;
-}
-
+/* Filtros */
 .filtro-container {
   display: flex;
   gap: 1rem;
   align-items: flex-end;
-  margin: 1rem;
   flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  margin: 0 15px;
 }
 
 .filtro {
@@ -103,8 +39,6 @@ button {
 .filtro label {
   cursor: pointer;
   font-weight: bold;
-  display: inline-block;
-  margin-bottom: 5px;
 }
 
 .checkbox-list {
@@ -128,7 +62,8 @@ button {
   white-space: nowrap;
 }
 
-.boton-filtro, .boton-limpiar {
+.boton-filtro,
+.boton-limpiar {
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -141,3 +76,248 @@ button {
 .boton-limpiar {
   background-color: #999;
 }
+.boton-guardar {
+  background-color: #007BFF; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.boton-guardar:hover {
+  background-color: #0056b3;
+}
+
+
+/* Tabla */
+.tabla-scrollable {
+  width: 97.5%;
+  flex: 1;
+  min-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.1);
+  background-color: white;
+  margin: 0 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+
+thead th {
+  background-color: #0066cc;
+  color: white;
+  padding: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  text-align: left;
+}
+
+td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+}
+
+tr#sin-tareas td {
+  text-align: center;
+  font-style: italic;
+  color: #555;
+  padding: 24px 12px;   /* 👉 Esto es lo que da más espacio */
+  font-size: 1rem;      /* 👉 Tamaño de letra más legible */
+}
+
+/* Ajustes de ancho para cada columna */
+thead th:nth-child(1) { width: 5%; }   /* ID */
+thead th:nth-child(2) { width: 15%; }  /* Título */
+thead th:nth-child(3) { width: 30%; }  /* Descripción */
+thead th:nth-child(4) { width: 10%; }  /* Estado */
+thead th:nth-child(5) { width: 10%; }  /* Prioridad */
+thead th:nth-child(6) { width: 10%; }  /* Área */
+thead th:nth-child(7) { width: 10%; }  /* Asignado a */
+thead th:nth-child(8) { width: 8%; }   /* Fecha */
+thead th:nth-child(9) { width: 7%; }   /* Acciones */
+
+/* Responsive: para pantallas pequeñas */
+@media (max-width: 768px) {
+  .tabla-scrollable {
+    overflow-x: auto;
+  }
+
+  table {
+    font-size: 0.9em;
+  }
+
+  thead th {
+    white-space: nowrap;
+  }
+}
+.prioridad-alta {
+  background-color: #e6acb1; 
+  color: #721c24;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.prioridad-media {
+  background-color: #a5e7f3; 
+  color: #0c5460;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.prioridad-baja {
+  background-color: #63f585; 
+  color: #155724;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+tr:hover {
+  background-color: #8b8383; /* color claro para destacar la fila */
+  cursor: pointer; /* opcional: cambia el cursor para indicar interactividad */
+}
+
+/* Botones */
+button {
+  margin: 2px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button.editar {
+  background-color: #007BFF;
+  color: white;
+}
+
+button.editar:hover {
+  background-color: #0056b3;
+}
+
+button.eliminar {
+  background-color: #dc3545;
+  color: white;
+}
+
+button.eliminar:hover {
+  background-color: #a50000;
+}
+
+.boton-cancelar {
+  background-color: #007acc;
+  color: white;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.boton-cancelar:hover {
+  background-color: #0056b3;
+}
+
+/* Formulario */
+.formulario-tarea {
+  max-width: 95%;
+  padding: 1rem;
+  background-color:rgba(127, 255, 212, 0.555);
+  border: 2px solid #9eb4d6;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+   margin: 0 15px;
+   margin-bottom: 20px;
+}
+
+.formulario-tarea .form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.formulario-tarea input,
+.formulario-tarea select {
+  flex: 1;
+  min-width: 150px;
+  padding: 6px;
+  font-size: 0.95rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+.formulario-tarea textarea {
+  width: 100%;
+  padding: 6px;
+  font-size: 0.95rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.formulario-tarea .botones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.checkbox-list {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  z-index: 10; /* este valor debe ser mayor al z-index de la tabla o su contenedor */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.boton-volver {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  padding: 8px 14px;
+  background-color: #007BFF;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.boton-volver:hover {
+  background-color: #0056b3;
+}
+.alerta-mensaje {
+  position: relative; /* Podés cambiar a fixed si querés tipo toast */
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  width: fit-content;
+  margin: 10px auto; /* Centrado */
+  text-align: center;
+  display: none;
+  animation: aparecer 0.3s ease;
+  z-index: 1000;
+}
+
+.alerta-mensaje.visible {
+  display: block;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
