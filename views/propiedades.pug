@@ -79,11 +79,6 @@ form#formCrearPropiedad(method="POST", action="/propiedades", onsubmit="event.pr
     option(value="Casa") Casa
     option(value="Departamento") Departamento
 
-  label(for="estado") Estado: *
-  select(name="estado", id="estado", required)
-    option(value="") Seleccione el estado de la propiedad
-    option(value="Disponible") Disponible
-    option(value="Reservada") Reservada
    
 
   label(for="ambientes") Ambientes: *
@@ -100,6 +95,12 @@ form#formCrearPropiedad(method="POST", action="/propiedades", onsubmit="event.pr
    
   label(for="descripcion") Descripcion: *
   input(type="text", name="descripcion", id="descripcion", required)
+  
+  label(for="estado") Estado: *
+  select(name="estado", id="estado", required)
+    option(value="") Seleccione el estado de la propiedad
+    option(value="Disponible") Disponible
+    option(value="Reservada") Reservada
  
    
   label(for="precio") Precio: *
